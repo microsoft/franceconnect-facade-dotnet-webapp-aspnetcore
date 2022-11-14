@@ -1,4 +1,30 @@
 
+# About the FranceConnect Facade
+
+** This project is a Work In Progress (WIP) effort **
+
+In 2019, the French government created DINUM (Inter-Ministerial Digital Directorate) to support the digital transformation of the state and all communities. DINUM is an entity very influential attached to the Prime Minister.
+DINUM supports ministries, towns, departments and regions. But it is also developing shared services and resources such as FranceConnect.
+
+FranceConnect (FC) is a solution offered by DINUM which makes it possible to secure and simplify the connection of all French citizen with e-administration, and the related online services. See https://franceconnect.gouv.fr, https://partenaires.franceconnect.gouv.fr/. Interestingly, a demo environment is available [here](https://fournisseur-de-service.dev-franceconnect.fr).
+
+FranceConnect figures:
+- 40+ million users.
+- 18 million monthly connections.
+- Access to over 1400 online services. Such services are referred as to FranceConnected services.
+
+In terms of supported identity providers (IdP), this platform makes it possible for citizens to use an existing account @ an administrations or an e-gov agency’s website, e.g., IRS and social security. 
+
+From FranceConnected services (a.k.a., service providers (SP)) standpoint, Dynamics 365 Biz Apps portals, the Power Apps Portals/Power Pages websites, as well as Azure AD B2C, cannot unfortunately directly integrate with the FranceConnect platform (FCP), while both these offerings and FCP are based on the same industry standard protocol, namely the [OpenID Connect (OIDC) protocol](https://openid.net/specs/openid-connect-core-1_0.html) w/ the authorization code flow. As always, the devil resides in detail. 
+
+in this context, this project both discusses and illustrates a suggested solution via a so-called FranceConnect Facade (FCF), i.e., a lightweight adaptation layer to handle all the identified discrepancies and cope with the related issues, and to ultimately interoperate with FCP from a "plumbing" perspective. 
+
+This project currently provides the following content:
+* [A series of technical-functional specifications (Draft) to build such a facade](https://github.com/microsoft/franceconnect-facade-dotnet-webapp-aspnetcore/tree/master/specs).
+* [A code sample in .NET 6 to illustrate how to implement such a defined facade](https://github.com/microsoft/franceconnect-facade-dotnet-webapp-aspnetcore/tree/master/code). 
+- [A "Getting Started" guide to help deploy the illustration code sample first on a local development environment and then on Azure, and how to test it](https://github.com/microsoft/franceconnect-facade-dotnet-webapp-aspnetcore/tree/master/docs).
+- [A series of Bicep scripts to help deploy the required resources in Azure, and fulfill the prerequisites that pertains to this deployment](ttps://github.com/microsoft/franceconnect-facade-dotnet-webapp-aspnetcore/tree/main/bicep).
+
 # Contributing
 
 This project welcomes contributions and suggestions.  Most contributions require you to agree to a
