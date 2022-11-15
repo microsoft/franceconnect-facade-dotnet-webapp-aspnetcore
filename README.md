@@ -1,3 +1,35 @@
+# FranceConnect Starter Kit - FranceConnect Facade
+
+**This project is a Work In Progress (WIP) effort**
+
+## About FranceConnect
+
+The [FranceConnect](https://franceconnect.gouv.fr) platform (FCP) is an identification system designed to facilitate user access to the digital online services of the e-government, a.k.a. FranceConnected services, avoiding every French citizen to have to create a new account when accessing a new online service and therefore to remember different passwords for all services accessed.
+
+To do this, FCP allows each user to have an identification mechanism recognized by the administration's online services through the FranceConnect button. When accessing a new service, in addition to the possibility of registering with an administrative authority that the user does not yet know, the button allows the user to select a compatible supported identity that he or she already has, and use it in this context. In terms of supported identity providers (IdP), this platform makes it possible for citizens to use an existing account @ an administrations or an e-gov agency’s website, e.g., IRS and social security. Interestingly, a demo environment is available [here](https://fournisseur-de-service.dev-franceconnect.fr).
+
+FranceConnect is supported by the Interministerial Digital Directorate, or DINUM, which assists ministries in their digital transformation, advises the government and develops shared services and resources, such as the State's online identification and authentication system, or the State's interministerial network, data.gouv.fr or api.gouv.fr.
+
+FranceConnect figures:
+- 40+ million users.
+- 18 million monthly connections.
+- Access to over 1400 online services. Such services are referred as to FranceConnected services.
+
+The FranceConnect service implementation documentation is available on the [partner portal](https://partenaires.franceconnect.gouv.fr/) provided by DINUM.
+
+## About the FranceConnect Facade (FCP)
+
+From a FranceConnected services (a.k.a., service providers (SP)) standpoint, [Dynamics 365](https://dynamics.microsoft.com/) Biz Apps portals, the [Power Pages](https://powerpages.microsoft.com/) websites, formely Power Apps portals, as well as [Azure AD B2C](https://azure.microsoft.com/en-us/services/active-directory/external-identities/b2c/#overview), cannot unfortunately directly integrate with the FranceConnect platform (FCP), while both these offerings and FCP are based on the same industry standard protocol, namely the [OpenID Connect (OIDC) protocol](https://openid.net/specs/openid-connect-core-1_0.html) w/ the authorization code flow. As always, the devil resides in detail. 
+
+in this context, this project both discusses and illustrates a suggested solution via a so-called FranceConnect Facade (FCF), i.e., a lightweight adaptation layer to handle all the identified discrepancies and cope with the related issues, and to ultimately interoperate with FCP from a "plumbing" perspective. 
+
+## Content
+
+This project currently provides the following content:
+* [A series of technical-functional specifications (Draft)](https://github.com/microsoft/franceconnect-facade-dotnet-webapp-aspnetcore/tree/master/Specifications) to build such a facade.
+* [A code sample in .NET 6 (LTS)](https://github.com/microsoft/franceconnect-facade-dotnet-webapp-aspnetcore/tree/master/Source) to illustrate how to implement such a defined facade. 
+- [A "Getting Started" guide](https://github.com/microsoft/franceconnect-facade-dotnet-webapp-aspnetcore/tree/master/Documentation) to help deploy the code sample, and how to test it.
+- [A series of Bicep scripts](ttps://github.com/microsoft/franceconnect-facade-dotnet-webapp-aspnetcore/tree/main/Scripts) to help deploy the required resources in Azure, and fulfill the prerequisites that pertains to this deployment.
 
 # Contributing
 
