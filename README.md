@@ -29,7 +29,7 @@ This project currently provides the following content:
 - [A series of technical-functional specifications (Draft)](https://github.com/microsoft/franceconnect-facade-dotnet-webapp-aspnetcore/tree/master/Specifications) to build such a facade.
 - [A code sample in .NET 6 (LTS)](https://github.com/microsoft/franceconnect-facade-dotnet-webapp-aspnetcore/tree/master/Source) to illustrate how to implement such a defined facade. 
 - [A "Getting Started" guide](https://github.com/microsoft/franceconnect-facade-dotnet-webapp-aspnetcore/tree/master/Documentation) to help deploy the code sample, and how to test it.
-- [A series of Bicep scripts](https://github.com/microsoft/franceconnect-facade-dotnet-webapp-aspnetcore/tree/main/Scripts) to help deploy the required resources in Azure, and fulfill the prerequisites that pertains to this deployment.
+- [A series of Bicep scripts](https://github.com/microsoft/franceconnect-facade-dotnet-webapp-aspnetcore/tree/main/scripts) to help deploy the required resources in Azure, and fulfill the prerequisites that pertains to this deployment.
 
 # Contributing
 
