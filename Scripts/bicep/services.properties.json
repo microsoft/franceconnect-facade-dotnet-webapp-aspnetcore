@@ -1,0 +1,45 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentParameters.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "managedidentity" : {
+            "value": {
+                "name":"fcfidentity4242"
+            }
+        }, 
+        "keyvault" : {
+            "value" :{             
+                "name":"fcfkeyvault4242",
+                "sku" :{
+                    "family":"A",
+                    "name":"standard"
+                }
+            }
+        },
+        "appserviceplan" :{
+            "value": {
+                "name":"fcfplan4242",
+                "kind":"app",
+                "sku": {
+                    "name": "S1",
+                    "tier": "Standard",
+                    "size": "S1",
+                    "family": "S",
+                    "capacity": 1
+                }
+            }
+        },
+        "website":{
+            "value": {
+                "name":"fcfapi4242",
+                "kind":"app",
+                "identity":{
+                    "type":"UserAssigned"
+                },
+                "properties" : {
+                    "httpsOnly":true
+                }
+            }
+        }
+    }
+}
