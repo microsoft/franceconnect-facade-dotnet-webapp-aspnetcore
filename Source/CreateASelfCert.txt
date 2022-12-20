@@ -1,0 +1,20 @@
+
+1er choix 
+#Create a private key
+openssl genrsa -des3 -out fcfsigningcert.key 2048
+
+
+#Create a Certificate Signing Request (CSR)
+openssl req -key fcfsigningcert.key -new -out fcfsigningcert.csr
+
+#Create a self-signed certificate
+openssl x509 -signkey fcfsigningcert.key -in fcfsigningcert.csr -req -sha256 -days 365 -out fcfsigningcert.crt
+
+
+#or directly in one command
+openssl req -newkey rsa:2048 -keyout fcfsigningcert.key -x509 -sha256 -days 365 -out fcfsigningcert.crt
+
+
+
+#Convert the development certificate to a PKCS12 file (extension pfx)
+openssl pkcs12 -export -in fcfsigningcert.crt -inkey fcfsigningcert.key -CSP "Microsoft Enhanced RSA and AES Cryptographic Provider" -out ./fcf.WebApi/fcfsigningcert.pfx

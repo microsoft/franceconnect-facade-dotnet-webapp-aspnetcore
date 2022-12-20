@@ -1,8 +1,8 @@
 # About the FranceConnect Facade (FCF) code sample
 
-**The code sample will available soon. Stay tuned! This is a Work In Progress (WIP).**
+**The code sample is a Work In Progress (WIP).**
 
-It will be intented for the sole purpose of illustratring how to implement the suggested solution so that the [Dynamics 365](https://dynamics.microsoft.com/) Biz Apps portals, the [Power Pages](https://powerpages.microsoft.com/) websites, formely Power Apps portals, as well as [Azure AD B2C](https://azure.microsoft.com/en-us/services/active-directory/external-identities/b2c/#overview), can smoothly as possible integrate with the FranceConnect Platform (FCP) from a service provider (SP) perspective.
+It is intented for the sole purpose of illustratring how to implement the suggested solution so that the [Dynamics 365](https://dynamics.microsoft.com/) Biz Apps portals, the [Power Pages](https://powerpages.microsoft.com/) websites, formely Power Apps portals, as well as [Azure AD B2C](https://azure.microsoft.com/en-us/services/active-directory/external-identities/b2c/#overview), can smoothly as possible integrate with the FranceConnect Platform (FCP) from a service provider (SP) perspective.
 
 # Knwon Limitations
 
