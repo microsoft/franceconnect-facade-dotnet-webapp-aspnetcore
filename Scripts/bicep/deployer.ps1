@@ -4,13 +4,14 @@ param ([string][Parameter( Mandatory=$false)]$FranceConnectClientId,
 
 $FranceConnectClientId="211286433e39cce01db448d80181bdfd005554b19cd51b3fe7943f6b3b86ab6e"
 $FranceConnectClientSecret="2791a731e6a59f56b6b4dd0d08c9b1f593b5f3658b9fd731cb24248e2669af4b"
+
 $AzureActiveDirectoryTenantId="1ef8d71b-7c85-420d-be7d-207d2959a5e6"
 $AzureSubscriptionId="6a031348-279f-40ed-be25-0b3787f3ae15"
 $location="francecentral"
-$rgname="FranceConnectFacadeLnx02-rg"
+$rgname="FranceConnectFacadeLnx03-rg"
 
 
-#az login --tenant $AzureActiveDirectoryTenantId
+az login --tenant $AzureActiveDirectoryTenantId
 
 az account set --subscription $AzureSubscriptionId
 
@@ -60,7 +61,7 @@ az keyvault certificate create --vault-name $keyvaultname `
 $webapiName="fcfapi"+$uniquePrefix
 
 write-host  "Deploying '$webapiName' web app"
-$sourcePath="..\Source\fcf.WebApi\"
+$sourcePath="..\..\Source\fcf.WebApi\"
 $destinationPath=".\publier"
 $zipFile=".\publier\fcf.zip"
 
