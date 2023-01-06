@@ -1,24 +1,39 @@
 {
     "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentParameters.json#",
     "contentVersion": "1.0.0.0",
-    "parameters": {
+    "parameters": {        
         "managedidentity" : {
             "value": {
-                "name":"fcfidentity4242"
+                "name":"fcfidentity"
             }
         }, 
         "keyvault" : {
             "value" :{             
-                "name":"fcfkeyvault4242",
+                "name":"fcfkeyvault",
                 "sku" :{
                     "family":"A",
                     "name":"standard"
                 }
             }
         },
+        "appserviceplanlnx" :{
+            "value": {
+                "name":"fcfplanlnx",
+                "kind":"linux",
+                "sku": {
+                    "name": "B1",                    
+                    "capacity": 1
+                },
+                "properties": {
+                    "kind": "linux",
+                    "reserved": true
+                    
+                }
+            }
+        },
         "appserviceplan" :{
             "value": {
-                "name":"fcfplan4242",
+                "name":"fcfplan",
                 "kind":"app",
                 "sku": {
                     "name": "S1",
@@ -29,15 +44,51 @@
                 }
             }
         },
+        "websitelnx":{
+            "value": {
+                "name":"fcfapi",
+                "kind":"app,linux",
+                "identity":{
+                    "type":"UserAssigned"
+                },
+                "properties" : {
+                    "httpsOnly":true,
+                    "siteConfig": {
+                        "linuxFxVersion": "DOTNETCORE|6.0"
+                    }
+                }
+            }
+        },
         "website":{
             "value": {
-                "name":"fcfapi4242",
+                "name":"fcfapi",
                 "kind":"app",
                 "identity":{
                     "type":"UserAssigned"
                 },
                 "properties" : {
                     "httpsOnly":true
+                }
+            }
+        },
+        "loganalytics":{
+            "value":{
+                "name":"fcfloganalytics",
+                "properties":{
+                    "sku":{
+                        "name":"PerGB2018"
+                    }
+                }
+            }
+        },
+        "appinsights":{
+            "value":{
+                "name":"fcfappinsights",
+                "kind":"web",
+                "properties":{
+                    "Application_Type":"web",
+                    "IngestionMode":"LogAnalytics",
+                    "WorkspaceResourceId":""
                 }
             }
         }

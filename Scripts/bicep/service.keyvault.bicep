@@ -10,9 +10,9 @@ var tenantId=identity.properties.tenantId
 var principalId=identity.properties.principalId
 
 
-var servicesProperties =json(loadTextContent('Services.Properties.json'))
+var servicesProperties =json(loadTextContent('services.properties.json'))
 
-//TODO : Change policies to RBAC
+@description('Création du Key Vault')
 resource keyvault 'Microsoft.KeyVault/vaults@2022-07-01' = {
   name: keyvaultName
   location:location
@@ -43,3 +43,4 @@ resource keyvault 'Microsoft.KeyVault/vaults@2022-07-01' = {
 }
 
 
+output keyvaultName string = keyvault.name

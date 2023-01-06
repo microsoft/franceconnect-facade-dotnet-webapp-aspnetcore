@@ -35,6 +35,7 @@ namespace FranceConnectFacade.Identity.Helpers
             }
 
             return frombody;
-        }    
+        }
+           
     }
 }

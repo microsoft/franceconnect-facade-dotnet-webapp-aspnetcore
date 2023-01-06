@@ -13,32 +13,33 @@ builder.Logging.AddConsole();
 builder.Services.AddControllers();
 
 builder.Services.AddEndpointsApiExplorer();
-#if DEBUG
-    builder.Services.AddSwaggerGen();
-#endif
 
-bool UseDevelopmentCertificate = builder.Configuration.IsSettingEnabled("X509:UseDevelopmentCertificate");
-if (UseDevelopmentCertificate)
-{
-    builder.Configuration.AddDevelopmentCertificate();
-}
-else
-{
-    builder.Configuration.AddCertificateFromKeyVault();
-}
+builder.Services.AddSwaggerGen();
+
 builder.Services.AddTransient<IHttpFranceConnectClient, HttpFranceConnectClient>();
 builder.Services.AddHttpClient<HttpFranceConnectClient>();
 
 var fcConfig = builder.Configuration
                                 .GetSection("FranceConnect")
                                 .Get<FranceConnectConfiguration>();
+bool UseDevelopmentCertificate = builder.Configuration.IsSettingEnabled("UseDevelopmentCertificate");
 
-// Lecture des parametres de configuration FranceConnect
-fcConfig.ClientSecret = builder.Configuration["FranceConnect:ClientSecret"];
+if (UseDevelopmentCertificate)
+{
+    builder.Configuration.AddDevelopmentCertificate();
+    
+}
+else
+{
+    builder.Configuration.AddCertificateFromKeyVault();      
+}
 
-fcConfig.ClientId = builder.Configuration["FranceConnect:ClientId"];
+fcConfig.ClientSecret = builder.Configuration["ClientSecret"];
+fcConfig.ClientId = builder.Configuration["ClientId"];
 
-builder.Services.AddScoped<FranceConnectFacadeConfigurationOptions>((provider)=>
+
+
+builder.Services.AddSingleton<FranceConnectFacadeConfigurationOptions>((provider)=>
 {
 
     return new FranceConnectFacadeConfigurationOptions
@@ -49,7 +50,9 @@ builder.Services.AddScoped<FranceConnectFacadeConfigurationOptions>((provider)=>
     };
 });
 
+
 var app = builder.Build();
+
 
 if (app.Environment.IsDevelopment())
 {
@@ -57,9 +60,14 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
+
+
 // Utilisation du middleware
 app.UseFranceConnectFacade();
 
 app.MapControllers();
 
 app.Run();
+
+
+

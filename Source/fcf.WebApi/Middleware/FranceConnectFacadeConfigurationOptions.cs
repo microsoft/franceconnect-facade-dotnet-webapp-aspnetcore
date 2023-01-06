@@ -1,6 +1,7 @@
 ﻿// Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
+
 using FranceConnectFacade.Identity.Services;
 
 namespace FranceConnectFacade.Identity.WebApi.Middleware

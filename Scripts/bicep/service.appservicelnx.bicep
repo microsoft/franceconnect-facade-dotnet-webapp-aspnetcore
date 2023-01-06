@@ -13,8 +13,9 @@ var servicesProperties =json(loadTextContent('services.properties.json'))
 resource serviceplan 'Microsoft.Web/serverfarms@2021-02-01' = {
   name:appServicePlanName
   location:location
-  kind: servicesProperties.parameters.appserviceplan.value.kind
-  sku: servicesProperties.parameters.appserviceplan.value.sku
+  kind: servicesProperties.parameters.appserviceplanlnx.value.kind
+  sku: servicesProperties.parameters.appserviceplanlnx.value.sku
+  properties: servicesProperties.parameters.appserviceplanlnx.value.properties
   tags: {
     project:'FranceConnectFacade'
   }
@@ -28,9 +29,19 @@ resource identity 'Microsoft.ManagedIdentity/userAssignedIdentities@2018-11-30' 
 resource webSite 'Microsoft.Web/sites@2021-02-01' = {
   name:websiteName
   location:location
-  kind: servicesProperties.parameters.website.value.kind
+  kind: servicesProperties.parameters.websitelnx.value.kind
   properties: {
-    serverFarmId: serviceplan.id   
+    serverFarmId: serviceplan.id 
+    siteConfig: {
+      linuxFxVersion: servicesProperties.parameters.websitelnx.value.properties.siteConfig.linuxFxVersion
+      alwaysOn: true
+      use32BitWorkerProcess: false
+      cors: {
+        allowedOrigins: [
+          '*'
+        ]
+      }
+    }
   }
   identity: {
     type: 'UserAssigned'

@@ -12,6 +12,7 @@ using System.Text.Json;
 
 namespace FranceConnectFacade.Identity.Controllers
 {
+    
     [Produces("application/json")]
     [ApiController]
     public class FranceConnectFacadeTestDevFC : ControllerBase

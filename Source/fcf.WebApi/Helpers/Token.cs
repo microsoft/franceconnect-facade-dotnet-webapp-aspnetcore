@@ -60,12 +60,14 @@ namespace FranceConnectFacade.Identity.Helpers
         public static ClaimsPrincipal? ValidateFranceConnectToken(FranceConnectConfiguration config,
                                                                   string token)
         {
+
             ClaimsPrincipal? claims = null;
             if (config == null) throw new ArgumentNullException("config");
             if (config.Issuer == null) throw new ArgumentNullException("Issuer");
             if (config.ClientId == null) throw new ArgumentNullException("ClientId");
             if (config.ClientSecret == null) throw new ArgumentNullException("ClientSecret");
             if (string.IsNullOrEmpty(token)) throw new ArgumentNullException("token");
+
 
             JwtSecurityTokenHandler jwtHandler = new JwtSecurityTokenHandler();
 
@@ -92,6 +94,9 @@ namespace FranceConnectFacade.Identity.Helpers
             }
 
             return claims;
+
         }
+
     }
+
 }

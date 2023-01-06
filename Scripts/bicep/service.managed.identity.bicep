@@ -1,5 +1,4 @@
 param location string
-
 @minLength(5)
 @maxLength(24)
 param identityName string 

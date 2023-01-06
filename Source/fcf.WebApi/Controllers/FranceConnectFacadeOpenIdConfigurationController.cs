@@ -5,7 +5,6 @@ using FranceConnectFacade.Identity.Extensions;
 using FranceConnectFacade.Identity.Model;
 using FranceConnectFacade.Identity.WebApi.Extensions;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Configuration;
 using System.Security.Cryptography.X509Certificates;
 
 namespace FranceConnectFacade.Identity.Controllers
@@ -24,7 +23,21 @@ namespace FranceConnectFacade.Identity.Controllers
             _logger = logger;
             _configuration = configuration;
         }
+        [HttpGet]
+        [Route("discovery/debug")]        
+        [Produces("application/json")]
+        public IActionResult Debug()
+        {
+            string CertificateNameKeyVault = _configuration.GetCertificateName();
+            string rawCertificate = _configuration[CertificateNameKeyVault];
+            var rawCertFromBase64 = Convert.FromBase64String(rawCertificate);
+            _logger.LogInformation("RawCertFromBase64");
+            X509Certificate2 x509 = new X509Certificate2(rawCertFromBase64);
+            return Ok(x509.GetIssuerName());
 
+            //return Ok(_configuration["ClientId"]);
+
+        }
         /// <summary>
         /// Point de terminaison permettant de récupérer la clé
         /// publique pour la signature  et le chiffrement des jetons Web
@@ -45,6 +58,7 @@ namespace FranceConnectFacade.Identity.Controllers
                        .Get<OpenIdDiscoveryKeys>();
             if (discovery == null)
             {
+                _logger.LogError("OpenIdDiscoveryKeys non trouvé");
                 return StatusCode(500);
             }
             string CertificateNameKeyVault = _configuration.GetCertificateName();
@@ -52,23 +66,26 @@ namespace FranceConnectFacade.Identity.Controllers
 
             if (string.IsNullOrEmpty(rawCertificate))
             {
+                _logger.LogError("Certificat non trouvé dans le keyvault");
                 return StatusCode(500);
             }
             X509Certificate2 x509 = new X509Certificate2(Convert.FromBase64String(rawCertificate));
             
             if (discovery.keys == null)
             {
+                _logger.LogError("OpenIdDiscoveryKeys.keys non trouvé");
                 return StatusCode(500);
             }
             
-            // Récupère le certificat avec la clé publique qui
-            // permettra de signer le jeton
+            // Récupère le certificat avec uniquement la clé publique
+            // (sans la clé privée) qui permettra de signer le jeton
+            
             discovery.keys[0].x5c = new string[] { Convert.ToBase64String(x509.GetRawCertData()) };
 
             // TODO : A vérifier
             // https://www.rfc-editor.org/rfc/rfc7517.html#section-4.5
             //discovery.keys[0].n = x509.GetSerialNumberString();
-            discovery.keys[0].kid = x509.Thumbprint;
+            discovery.keys[0].kid =x509.Thumbprint;
             //discovery.keys[0].x5t = x509.Thumbprint;
             return Ok(discovery);
         }
@@ -86,6 +103,7 @@ namespace FranceConnectFacade.Identity.Controllers
         [Route(".well-known/openid-configuration")]                
         public IActionResult OpenIdConfiguration()
         {
+            
             _logger.LogInformation($"Controller  : .well-know/OpenIdConfiguration");
             var baseAddress = Request.FormatBaseAddress();
 
@@ -115,6 +133,9 @@ namespace FranceConnectFacade.Identity.Controllers
             openIdConfiguration.Issuer = baseAddress;
 
             return Ok(openIdConfiguration);
+            
         }
+
+
     }
 }

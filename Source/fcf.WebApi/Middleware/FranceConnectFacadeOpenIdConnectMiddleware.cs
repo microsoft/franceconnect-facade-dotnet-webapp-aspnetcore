@@ -1,6 +1,8 @@
 ﻿// Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
+
+
 using FranceConnectFacade.Identity.Extensions;
 using FranceConnectFacade.Identity.Helpers;
 using FranceConnectFacade.Identity.Services;
@@ -8,8 +10,11 @@ using FranceConnectFacade.Identity.WebApi.Middleware;
 using System.Security.Claims;
 using System.Text;
 
+
 namespace FranceConnectFacade.Identity.Middleware
 {
+   
+    
     public class FranceConnectFacadeOpenIdConnectMiddleware
     {
         private readonly RequestDelegate _next;
@@ -122,6 +127,8 @@ namespace FranceConnectFacade.Identity.Middleware
                     return;
                 }
                  
+               
+
                 // Besoin de valider et récupèrer les claims du Jeton FranceConnect
                 // afin de créer le nouveau id_token compatible Portal
                 ClaimsPrincipal? claimsPrincipal = Token.ValidateFranceConnectToken(options.FranceConnectOptions,
@@ -131,6 +138,7 @@ namespace FranceConnectFacade.Identity.Middleware
                     context.Response.StatusCode = 401;
                     return;
                 }
+
 
                 // le champ nonce est necessaire pour la création du jeton compatible portal
                 Claim? nonce = (from claim in claimsPrincipal.Claims
@@ -153,6 +161,8 @@ namespace FranceConnectFacade.Identity.Middleware
 #else
                 issuerEndPoint = context.Request.FormatBaseAddress();
 #endif
+
+
 
                     // Obtient les informations utilisateur à l'aide du jeton d'accès
                     string authorization = $"Bearer {franceConnectResult.AccessToken}";
@@ -191,6 +201,7 @@ namespace FranceConnectFacade.Identity.Middleware
                         context.Response.StatusCode = 401;
                         return;
                     }
+
 
                     // Sauvegarde du nouveau jeton
                     // pour réutilisation avec le EndPoint /api/token
@@ -303,6 +314,7 @@ namespace FranceConnectFacade.Identity.Middleware
                     }
                 }
             }
+
             
             await _next(context);
         }

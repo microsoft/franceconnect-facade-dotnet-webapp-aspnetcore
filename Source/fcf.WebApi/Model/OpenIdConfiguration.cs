@@ -61,5 +61,11 @@ namespace FranceConnectFacade.Identity.Model
         //RECOMMENDED
         [JsonPropertyName("claims_supported")]
         public string[]? ClaimsSupported { get; set; }
+
+
     }
+
+
+    
+
 }

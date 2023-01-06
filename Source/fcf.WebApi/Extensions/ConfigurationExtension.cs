@@ -17,20 +17,21 @@ namespace FranceConnectFacade.Identity.WebApi.Extensions
             bool.TryParse(set, out IsSet);
             return IsSet;
         }
-      
+        
         public static string GetCertificateName(this IConfiguration configuration)
         {
             string CertificateName;
-            bool UseDevelopmentCertificate = configuration.IsSettingEnabled("X509:UseDevelopmentCertificate");
+            bool UseDevelopmentCertificate = configuration.IsSettingEnabled("UseDevelopmentCertificate");
             if (UseDevelopmentCertificate)
             {
-                CertificateName = configuration["X509:DevCertificateName"];
+                CertificateName = configuration["DevCertificateName"];
             }
             else
             {
-                CertificateName = configuration["X509:CertificateNameKeyVault"];
-            }
             
+                CertificateName = configuration["CertificateNameKeyVault"];
+            }
+
             if (string.IsNullOrEmpty(CertificateName))
             {
                 throw new ArgumentNullException(nameof(CertificateName),ERROR_APPSETTINGS_NULL_VALUE);
@@ -48,7 +49,7 @@ namespace FranceConnectFacade.Identity.WebApi.Extensions
         public static void AddDevelopmentCertificate(this IConfiguration configuration)
         {
 
-            string DevelopmentCertificatePfx = configuration["X509:DevelopmentCertificatePfx"];
+            string DevelopmentCertificatePfx = configuration["DevelopmentCertificatePfxPath"];
             if (string.IsNullOrEmpty(DevelopmentCertificatePfx))
             {
                 throw new ArgumentNullException(nameof(DevelopmentCertificatePfx),ERROR_APPSETTINGS_NULL_VALUE);
@@ -58,7 +59,7 @@ namespace FranceConnectFacade.Identity.WebApi.Extensions
                 throw new FileNotFoundException(nameof(DevelopmentCertificatePfx),ERROR_CERTIFICATE_NOT_FOUND);
             }
 
-            string DevelopmentCertificatePassword = configuration["X509:DevelopmentCertificatePassword"];
+            string DevelopmentCertificatePassword = configuration["DevelopmentCertificatePassword"];
 
             if (string.IsNullOrEmpty(DevelopmentCertificatePassword))
             {
@@ -66,7 +67,7 @@ namespace FranceConnectFacade.Identity.WebApi.Extensions
             }
 
             X509Certificate2 x509 = new X509Certificate2(DevelopmentCertificatePfx, DevelopmentCertificatePassword,X509KeyStorageFlags.Exportable);
-            string certificatName = configuration["X509:DevCertificateName"];
+            string certificatName = configuration["DevCertificateName"];
             configuration[certificatName] = Convert.ToBase64String(x509.Export(X509ContentType.Pkcs12));
         }
         
@@ -80,8 +81,9 @@ namespace FranceConnectFacade.Identity.WebApi.Extensions
         /// <param name="configuration"></param>
         public static void AddCertificateFromKeyVault(this ConfigurationManager configuration)
         {
-
+            string AzureKeyVaultEndpoint = configuration["AzureKeyVaultEndpoint"];
 #if (DEBUG)
+
             // Autentification au service Azure Key Vault à partir de Visual Studio
             // en mode debug
             string TenantId = configuration["TenantId"];
@@ -89,7 +91,6 @@ namespace FranceConnectFacade.Identity.WebApi.Extensions
             {
                 throw new ArgumentNullException(nameof(TenantId), ERROR_APPSETTINGS_NULL_VALUE);
             }
-
             VisualStudioCredentialOptions options = new VisualStudioCredentialOptions
                 {
                     // Paramètre TenantId Azure Active Directory de l'abonnement
@@ -98,32 +99,32 @@ namespace FranceConnectFacade.Identity.WebApi.Extensions
                     
                 };
                 
-                string AzureKeyVaultEndpoint = configuration["X509:AzureKeyVaultEndpoint"];
                 if (string.IsNullOrEmpty(AzureKeyVaultEndpoint))
                 {
                     throw new ArgumentNullException(nameof(AzureKeyVaultEndpoint), ERROR_APPSETTINGS_NULL_VALUE);
                 }
-                
                 // Le compte utilisé est celui qui est connecté à Visual Studio et 
                 // utilisé dans le paramètre "Azure Service Authentification" des options
                 // Visual Studio.
-
                 // D'autre part il faut que ce compte ai les droits d'accès au Key vault.
                 // https://learn.microsoft.com/en-us/azure/key-vault/general/assign-access-policy?tabs=azure-portal
 
-                VisualStudioCredential VisualStudioCredential = new VisualStudioCredential(options);
+            VisualStudioCredential VisualStudioCredential = new VisualStudioCredential(options);
                 configuration.AddAzureKeyVault(new Uri(AzureKeyVaultEndpoint),
                                                 VisualStudioCredential);
 #else
-                    {
-                        if (builder.Environment.IsProduction())
-                        {
-                    
-                                configuration.AddAzureKeyVault(new Uri(AzureKeyVaultEndpoint),
-                                                               new DefaultAzureCredential());
-                        }
-                    }
+            {                
+                DefaultAzureCredentialOptions options = new DefaultAzureCredentialOptions
+                {
+                    ManagedIdentityClientId = configuration["ManagedIdentityId"]
+                };
+
+                configuration.AddAzureKeyVault(new Uri(AzureKeyVaultEndpoint),
+                                                new DefaultAzureCredential(options));                
+                        
+            }
 #endif
         }
+
     }   
 }

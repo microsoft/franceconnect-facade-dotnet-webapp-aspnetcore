@@ -14,5 +14,6 @@ namespace FranceConnectFacade.Identity.Middleware
     {
         public string? EndPoint { get; set; }
         public FranceConnectFacadeEndPoint() { }
+
     }
 }

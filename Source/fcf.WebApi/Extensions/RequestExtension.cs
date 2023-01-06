@@ -7,6 +7,7 @@ namespace FranceConnectFacade.Identity.Extensions
 {
     public static class RequestExtension
     {
+
         /// <summary>
         /// Récupère les paramètre de la requête encours
         /// ie (?param1=value1&param2=value2)
@@ -41,7 +42,7 @@ namespace FranceConnectFacade.Identity.Extensions
         /// <returns></returns>
         public static string FormatBaseAddress(this HttpRequest request)
         {
-            return $"{request.Scheme}://{request.Host}";
+            return $"https://{request.Host}";
         }
     }
 }

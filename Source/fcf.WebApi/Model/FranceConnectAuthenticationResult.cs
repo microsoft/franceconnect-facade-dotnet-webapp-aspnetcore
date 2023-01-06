@@ -36,4 +36,8 @@ namespace FranceConnectFacade.Identity.Model
             return JsonSerializer.Serialize<FranceConnectAuthenticationResult>(this);
         }
     }
+
+
+   
+
 }

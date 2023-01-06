@@ -31,4 +31,5 @@ namespace FranceConnectFacade.Identity.Services
         }
         public List<string>? Scopes { get; set; }        
     }
+
 }
