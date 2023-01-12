@@ -1,74 +1,88 @@
-param ([string][Parameter( Mandatory=$false)]$FranceConnectClientId,
-       [string][Parameter( Mandatory=$false)]$FranceConnectClientSecret,
-       [bool][Parameter( Mandatory=$true)]$isLinuxWebApp)
+# Description: Deploys the FranceConnect Facade services to Azure
+# SubscriptionId: The Azure subscription Id
+# FranceConnectClientId: The FranceConnect client Id
+# FranceConnectClientSecret: The FranceConnect client secret
+# ResourceGroupName: The resource group name
+# TenantId: The Azure Active Directory tenant Id
+# Location: The Azure location
+# IsLinuxWebApp: Indicates if the web app is a Linux web app or Windows web app
+param ([string][Parameter(Mandatory=$true)]$FranceConnectClientId,
+       [string][Parameter(Mandatory=$true)]$FranceConnectClientSecret,
+       [string][Parameter(Mandatory=$true)]$ResourceGroupName,
+       [string][Parameter(Mandatory=$true)]$SubscriptionId,       
+       [string][Parameter(Mandatory=$true)]$TenantId,
+       [string][Parameter(Mandatory=$true)]$location,
+       [bool][Parameter(Mandatory=$false)]$IsLinuxWebApp=$false)
 
-$FranceConnectClientId="211286433e39cce01db448d80181bdfd005554b19cd51b3fe7943f6b3b86ab6e"
-$FranceConnectClientSecret="2791a731e6a59f56b6b4dd0d08c9b1f593b5f3658b9fd731cb24248e2669af4b"
+# Connecte l'utilisateur à Azure
+$userInfo=$(az login --tenant $TenantId) | convertfrom-json
+# Récupère l'objet id de l'utilisateur connecté 
+# Nous servira à donner les droits de gestion du keyvault 
+# à l'utilisateur connecté
+$oid=az ad user show --id $userInfo.user.name --query id
 
-$AzureActiveDirectoryTenantId="1ef8d71b-7c85-420d-be7d-207d2959a5e6"
-$AzureSubscriptionId="6a031348-279f-40ed-be25-0b3787f3ae15"
-$location="francecentral"
-$rgname="FranceConnectFacadeLnx03-rg"
-
-
-az login --tenant $AzureActiveDirectoryTenantId
-
-az account set --subscription $AzureSubscriptionId
+# Définir la souscription par défaut
+az account set --subscription $SubscriptionId
 
 
-write-host  "Creating '$rgname' resource group in '$location'" 
-az group create -n $rgname -l $location 
+write-host  "Creating '$ResourceGroupName' resource group in '$Location'" 
+az group create -n $ResourceGroupName -l $Location 
 
-write-host "Set default '$rgname' as resource group for bicep deployment"
-az configure --defaults group=$rgname
+# Définir le groupe de ressources par défaut utile pour le déploiement biceps
+write-host "Set default '$ResourceGroupName' as resource group for bicep deployment"
+az configure --defaults group=$ResourceGroupName
 
-write-host  "Deploying services to '$rgname'" 
+# Déployer les services 
+write-host  "Deploying services to '$ResourceGroupName'" 
 az deployment group create --name "Services.Main.FranceConnectFacade" `
                     --template-file "main.bicep" `
-                    --parameters location=$location  `
+                    --parameters location=$Location  `
                     franceConnectClientId=$FranceConnectClientId `
                     franceConnectClientSecret=$FranceConnectClientSecret `
-                    isLinuxWebApp=$isLinuxWebApp
+                    isLinuxWebApp=$IsLinuxWebApp
 
 
-    
-write-host  "Create a self certificat"
+
+# Retrouve le prefix unique à partir de la srotie du déploiement
 $uniquePrefix=$(az deployment group show `
-                -g $rgname `
+                -g $resourceGroupName `
                 -n  "Services.Main.FranceConnectFacade" `
                  --query properties.outputs | convertfrom-json).uniqueNamePrefix.value
 
-# Retrouve le nom du keyvault à partir de l'output du déploiement
-$keyvaultname="fcfkeyvault"+$uniquePrefix
+
+# Construire le nom du keyvault            
+$keyvaultname=$(.\Get-Name.ps1 -service "keyvault") + $uniquePrefix
+
 $certname="keyvaultcert"
 
-# A Récupèrer l'objet id de l'utilisateur connecté (admin) 
-# sur le portail Azure Active Directory
-$oid="316d6a30-1fc2-45fa-80b4-9ec4ae440590"
+
 # Donne les droits de gestion du keyvault à l'utilisateur connecté
 az keyvault set-policy -n $keyvaultname `
                         --object-id $oid `
-                        -g $rgname `
+                        -g $ResourceGroupName `
                         --certificate-permissions "all" `
                         --key-permissions "all" `
                         --secret-permissions "all"
 
+write-host  "Create a self signin certificat"
 az keyvault certificate create --vault-name $keyvaultname `
                                --name $certname `
                                --policy "@defaultcertificatepolicy.json"
 
- 
-$webapiName="fcfapi"+$uniquePrefix
+
+# Construire le nom de la webapp
+$webapiName=$(.\Get-Name.ps1 -service "website") + $uniquePrefix
 
 write-host  "Deploying '$webapiName' web app"
 $sourcePath="..\..\Source\fcf.WebApi\"
 $destinationPath=".\publier"
 $zipFile=".\publier\fcf.zip"
 
+
 dotnet publish  $sourcePath -c Release -o $destinationPath
 
 Compress-Archive -Path ".\publier\*.*" -DestinationPath $zipFile -force
 
 az webapp deployment source config-zip `
-          -g $rgname -n $webapiName --src $zipFile         
+          -g $resourceGroupName -n $webapiName --src $zipFile         
 

@@ -6,6 +6,8 @@
 #Publish file
 Scripts/bicep/publier/
 
+Scripts/bicep/Start.ps1
+
 # User-specific files
 *.rsuser
 *.suo

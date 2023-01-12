@@ -9,6 +9,7 @@ param isLinuxWebApp bool = false
 @description('Création chaine unique pour nommer les ressources Azure')
 var uniqueNamePrefix = uniqueString(resourceGroup().id)
 
+
 output uniqueNamePrefix string = uniqueNamePrefix
 
 @description('Création de l`identité managé')
@@ -67,9 +68,9 @@ module appInsights 'service.appinsights.bicep' = {
 }
 
 
-@description('Création de la WebApp qui va héberger l`API Facade FranceConnect')
-module webApp 'service.appservice.bicep' = if (!isLinuxWebApp) {
-  name:'Service.AppService'
+@description('Création de la WebApp (Windows) qui va héberger l`API Facade FranceConnect')
+module webApp 'service.appservice.windows.bicep' = if (!isLinuxWebApp) {
+  name:'Service.AppService.Windows'
   params: {
     location: location
     appServicePlanName:'${servicesProperties.parameters.appserviceplan.value.name}${uniqueNamePrefix}'
@@ -84,9 +85,9 @@ module webApp 'service.appservice.bicep' = if (!isLinuxWebApp) {
     appInsights
   ]
 }
-
-module webApplnx 'service.appservicelnx.bicep' = if (isLinuxWebApp) {
-  name:'Service.AppService.linux'
+@description('Création de la WebApp (Linux) qui va héberger l`API Facade FranceConnect')
+module webApplnx 'service.appservice.linux.bicep' = if (isLinuxWebApp) {
+  name:'Service.AppService.Linux'
   params: {
     location: location
     appServicePlanName:'${servicesProperties.parameters.appserviceplan.value.name}${uniqueNamePrefix}'

@@ -51,6 +51,7 @@ resource keyvault 'Microsoft.KeyVault/vaults@2022-07-01'  existing = {
 resource appInsights 'Microsoft.Insights/components@2020-02-02' existing = {
   name: appInsightsName
 }
+
 resource appsettings 'Microsoft.Web/sites/config@2021-02-01' = {
   parent:webSite  
   name : 'appsettings'

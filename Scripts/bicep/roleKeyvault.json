@@ -1,0 +1,14 @@
+{
+    "Name": "Key Vault Bicep deployment operator",
+    "IsCustom": true,
+    "Description": "Lets you deploy a Bicep file with the access to the secrets in the Key Vault.",
+    "Actions": [
+      "Microsoft.KeyVault/vaults/deploy/action"
+    ],
+    "NotActions": [],
+    "DataActions": [],
+    "NotDataActions": [],
+    "AssignableScopes": [
+      "/subscriptions/[GUID SUBSCRIPTION]"
+    ]
+  }
