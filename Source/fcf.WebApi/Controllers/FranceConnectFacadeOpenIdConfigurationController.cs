@@ -106,12 +106,8 @@ namespace FranceConnectFacade.Identity.Controllers
             
             _logger.LogInformation($"Controller  : .well-know/OpenIdConfiguration");
             var baseAddress = Request.FormatBaseAddress();
+            _logger.LogInformation($"Base address: {baseAddress}");
 
-#if TEST_FC_IN_PORTAL
-            // Changer adresse dans AppSettings.json du
-            // paramètre ngrok pour test/debug avec Portal
-            baseAddress = _configuration["ngrok"];         
-#endif
             var openIdConfiguration = _configuration
                                 .GetSection("OpenIdConfiguration")
                                 .Get<OpenIdConfiguration>();

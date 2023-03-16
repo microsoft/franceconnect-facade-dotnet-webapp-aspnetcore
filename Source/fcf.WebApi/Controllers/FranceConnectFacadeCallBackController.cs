@@ -15,12 +15,12 @@ namespace FranceConnectFacade.Identity.Controllers
     
     [Produces("application/json")]
     [ApiController]
-    public class FranceConnectFacadeTestDevFC : ControllerBase
+    public class FranceConnectFacadeCallBackController : ControllerBase
     {
-        private readonly ILogger<FranceConnectFacadeTestDevFC> _logger;
+        private readonly ILogger<FranceConnectFacadeCallBackController> _logger;
         private readonly IConfiguration _configuration;
         
-        public FranceConnectFacadeTestDevFC(ILogger<FranceConnectFacadeTestDevFC> logger,
+        public FranceConnectFacadeCallBackController(ILogger<FranceConnectFacadeCallBackController> logger,
                                   IConfiguration configuration)
         {
             _logger = logger;
@@ -28,26 +28,18 @@ namespace FranceConnectFacade.Identity.Controllers
         }
         
         /// <summary>
-        /// N'existe que pour répondre aux exigeances
-        /// du compte de dev France Connect
-        /// La facade doit démarrer sur le port 4242
-        /// <see cref="launchSettings.json" />
+        /// Récupère les paramètres retournés par FranceConnect et redirige vers l'application Portal/Page.
         /// </summary>
         /// <param name="code">Code de retour retourné par France Connect une fois 
-        ///                     l'utilisateur autentifié et qui servira à obtenir un jeton</param>
+        ///                     l'utilisateur authentifié et qui servira à obtenir un jeton</param>
         /// <param name="state">Etat renvoyé par FC</param>
         /// <returns></returns>
         [HttpGet]
         [Route("login-callback")]                
-        public RedirectResult FCDEVLoginCallBack([FromQuery] string code, 
+        public RedirectResult FCLoginCallBack([FromQuery] string code, 
                                                  [FromQuery] string state)
         {
-            // Code de test avec FC et portal
-            _logger.LogInformation("Controller : testfcinportal");
-            
-            // A Récupèrer cette URL sur le portail de powerapps  
-            // lors de l'ajout du fournisseur d'identité 
-            // OpenId Connect pour l'application Portal/Page
+            _logger.LogInformation($"Controller : login-callback");
 
             string? redirectUrl = $"{_configuration["FranceConnect:portalredirecturi"]}?code={code}&state={state}";
             //Redirige vers l'application Portal/Page
