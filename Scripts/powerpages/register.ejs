@@ -1,0 +1,25 @@
+<script>
+    $(document).ready(function(){
+      // Personalisation du bouton FranceConnect
+      $('[value="[FRANCECONNECTFACADE URL]"]').addClass("fc-button");
+      $(".fc-button").addClass("fc-button-background");
+      $(".fc-button").removeClass("btn btn-primary btn-line");
+      $(".fc-button").text("");
+      // La notion de compte FranceConnect ne doit pas apparaître
+      $(".fc-button").prop("title", "");
+  
+      // Création de nouvelles div
+      $("#mainContent").prepend('<div class="fc-signin"></div>');
+      $(".fc-signin").append('<form id="fc-form" action="/Account/Login/ExternalLogin?ReturnUrl=%2F" method="post"><input name="__RequestVerificationToken" type="hidden" value="ssx_iSw4ax0ZlLr1vCBABRmyBSqC9OV_vTCBIz9r9uaxfkWesrmCixIU0J_ZSoQ4P-uT6fwRHmWGNrvlTASewYbLXI9x9AkRgWXH1a9ZZik1">');
+      
+      $("#fc-form").append('<div class="form-group fc-container form-horizontal"></div>');
+      $("#fc-form").append('<div class="form-group span-container"></div>');
+  
+      // Ajout des éléments dans les nouvelles div
+      $(".fc-container").append('<p class="fc-text-info">FranceConnect est la solution proposée par l\'État pour sécuriser et simplifier la connexion à vos services en ligne.</p>')
+      $(".fc-button").appendTo(".fc-container");
+      $(".fc-container").append('<br>');
+      $(".fc-container").append('<a class="fc-redirect" href="https://franceconnect.gouv.fr/">Qu’est-ce que FranceConnect ?</a>')
+      $(".fc-span-container").append('<span class="xrm-editable-text xrm-attribute" data-languagecontext="français"><span class="xrm-attribute-value-encoded xrm-attribute-value">OU</span></span>');
+    });
+  </script>
