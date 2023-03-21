@@ -8,30 +8,28 @@ using FranceConnectFacade.Identity.Helpers;
 using FranceConnectFacade.Identity.Services;
 using FranceConnectFacade.Identity.WebApi.Middleware;
 using System.Security.Claims;
-using System.Text;
-
 
 namespace FranceConnectFacade.Identity.Middleware
 {
-   
-    
+
+
     public class FranceConnectFacadeOpenIdConnectMiddleware
     {
         private readonly RequestDelegate _next;
         private readonly IConfiguration _configuration;
-        
+
         private readonly IHttpFranceConnectClient _httpFcClient;
         private readonly ILogger<FranceConnectFacadeOpenIdConnectMiddleware> _logger;
-        public FranceConnectFacadeOpenIdConnectMiddleware(RequestDelegate next, 
+        public FranceConnectFacadeOpenIdConnectMiddleware(RequestDelegate next,
                                           IConfiguration configuration,
                                           IHttpFranceConnectClient httpFcClient,
                                           ILogger<FranceConnectFacadeOpenIdConnectMiddleware> logger)
         {
 
             _next = next ?? throw new ArgumentNullException(nameof(next));
-            
+
             _configuration = configuration ?? throw new ArgumentNullException(nameof(configuration));
-            
+
             _httpFcClient = httpFcClient ?? throw new ArgumentNullException(nameof(httpFcClient)); ;
             _logger = logger ?? throw new ArgumentNullException(nameof(logger)); ;
         }
@@ -48,12 +46,12 @@ namespace FranceConnectFacade.Identity.Middleware
             QueryString qs = context.Request.QueryString;
             string? fromQuery = qs.Value;
             if (string.IsNullOrEmpty(fromQuery))
-            {                
+            {
                 context.Response.StatusCode = 401;
                 return;
-                
+
             }
-            
+
             // Construction d'une nouvelle QueryString avec ajout
             // de acr_values obligatoire pour FranceConnect            
             string query = $"?client_id={Common.GetValue("client_id", fromQuery)}" +
@@ -80,106 +78,106 @@ namespace FranceConnectFacade.Identity.Middleware
         /// <param name="options"></param>
         /// <returns></returns>
         /// <exception cref="ArgumentNullException"></exception>
-        public async Task InvokeTokenEndPointAsync(HttpContext context, 
+        public async Task InvokeTokenEndPointAsync(HttpContext context,
                                                    FranceConnectFacadeConfigurationOptions options)
         {
             _logger.LogInformation($"Middle : InvokeTokenEndPointAsync");
             #region VERIFICATION DES PARAMETRES     
             options = options ?? throw new ArgumentNullException(nameof(options));
-                    if (options.FranceConnectOptions == null)
-                    {
-                        throw new ArgumentNullException(nameof(FranceConnectConfiguration));
-                    }
+            if (options.FranceConnectOptions == null)
+            {
+                throw new ArgumentNullException(nameof(FranceConnectConfiguration));
+            }
 
-                    if (string.IsNullOrEmpty(options.FranceConnectOptions.ClientSecret))
-                    {
-                        throw new ArgumentNullException("Secret FranceConnect non trouvé");
-                    }
-                    if (string.IsNullOrEmpty(options.FranceConnectOptions.ClientId))
-                    {
-                        throw new ArgumentNullException("Client Id FranceConnect non trouvé");
-                    }
-                    if (string.IsNullOrEmpty(options.X509Cert))
-                    {
-                        throw new ArgumentNullException("Certificat non trouvé");
-                    }
-                #endregion
+            if (string.IsNullOrEmpty(options.FranceConnectOptions.ClientSecret))
+            {
+                throw new ArgumentNullException("Secret FranceConnect non trouvé");
+            }
+            if (string.IsNullOrEmpty(options.FranceConnectOptions.ClientId))
+            {
+                throw new ArgumentNullException("Client Id FranceConnect non trouvé");
+            }
+            if (string.IsNullOrEmpty(options.X509Cert))
+            {
+                throw new ArgumentNullException("Certificat non trouvé");
+            }
+            #endregion
 
-                // Récupère le corps du message car nous allons le transformer
-                // pour être compatible avec portal
-                string fromBody = await context.Request.GetBodyAsync();
-                fromBody = $"client_id={Common.GetValue("client_id", fromBody)}" +
-                    $"&client_secret={Common.GetValue("client_secret", fromBody)}" +
-                    $"&code={Common.GetValue("code", fromBody)}" +
-                    $"&grant_type=authorization_code" +
-                    $"&redirect_uri={_configuration["FranceConnect:fcredirecturi"]}";
-                
-                // France Connect ne supporte pas le flux PKCE            
-                fromBody = Helpers.OAuth.DisablePKCE(fromBody);
-            
-                // Obtenir le jeton FranceConnect (endpoint api/v1/token)
-                _logger.LogInformation("Middle : Obtient le jeton FranceConnect");
-                var franceConnectResult = await _httpFcClient.GetFranceConnectToken(fromBody);
-                if (franceConnectResult == null)
-                {
-                    context.Response.StatusCode = 401;
-                    return;
-                }
+            // Récupère le corps du message car nous allons le transformer
+            // pour être compatible avec portal
+            string fromBody = await context.Request.GetBodyAsync();
+            fromBody = $"client_id={Common.GetValue("client_id", fromBody)}" +
+                $"&client_secret={Common.GetValue("client_secret", fromBody)}" +
+                $"&code={Common.GetValue("code", fromBody)}" +
+                $"&grant_type=authorization_code" +
+                $"&redirect_uri={_configuration["FranceConnect:fcredirecturi"]}";
 
-                if (string.IsNullOrEmpty(franceConnectResult.IdToken))
-                {
-                    context.Response.StatusCode = 401;
-                    return;
-                }
-                 
-               
+            // France Connect ne supporte pas le flux PKCE            
+            fromBody = Helpers.OAuth.DisablePKCE(fromBody);
 
-                // Besoin de valider et récupèrer les claims du Jeton FranceConnect
-                // afin de créer le nouveau id_token compatible Portal
-                ClaimsPrincipal? claimsPrincipal = Token.ValidateFranceConnectToken(options.FranceConnectOptions,
-                                                                                            franceConnectResult.IdToken);
-                if (claimsPrincipal == null)
-                {
-                    context.Response.StatusCode = 401;
-                    return;
-                }
+            // Obtenir le jeton FranceConnect (endpoint api/v1/token)
+            _logger.LogInformation("Middle : Obtient le jeton FranceConnect");
+            var franceConnectResult = await _httpFcClient.GetFranceConnectToken(fromBody);
+            if (franceConnectResult == null)
+            {
+                context.Response.StatusCode = 401;
+                return;
+            }
+
+            if (string.IsNullOrEmpty(franceConnectResult.IdToken))
+            {
+                context.Response.StatusCode = 401;
+                return;
+            }
 
 
-                // le champ nonce est necessaire pour la création du jeton compatible portal
-                Claim? nonce = (from claim in claimsPrincipal.Claims
-                                where claim.Type == "nonce"
-                                select claim)
-                                .FirstOrDefault<Claim>();
-                if (nonce == null)
-                {
-                    context.Response.StatusCode = 401;
-                    return;
-                }                 
-            
-                // La Façade c'est elle qui fait office d'issuer
-                string? issuerEndPoint = null;
 
-// L'issuer ici doit bien indiquer l'adresse ngrok et non localhost
-// s'il teste avec le compte dev de FranceConnect sinon echec
-#if FC_DEV
-                issuerEndPoint = _configuration["ngrok"];
+            // Besoin de valider et récupèrer les claims du Jeton FranceConnect
+            // afin de créer le nouveau id_token compatible Portal
+            ClaimsPrincipal? claimsPrincipal = Token.ValidateFranceConnectToken(options.FranceConnectOptions,
+                                                                                        franceConnectResult.IdToken);
+            if (claimsPrincipal == null)
+            {
+                context.Response.StatusCode = 401;
+                return;
+            }
+
+
+            // le champ nonce est necessaire pour la création du jeton compatible portal
+            Claim? nonce = (from claim in claimsPrincipal.Claims
+                            where claim.Type == "nonce"
+                            select claim)
+                            .FirstOrDefault<Claim>();
+            if (nonce == null)
+            {
+                context.Response.StatusCode = 401;
+                return;
+            }
+
+            // La Façade c'est elle qui fait office d'issuer
+            string? issuerEndPoint = null;
+
+            // L'issuer ici doit bien indiquer l'adresse ngrok et non localhost
+            // s'il teste avec le compte dev de FranceConnect sinon echec
+#if NGROK
+            issuerEndPoint = _configuration["ngrok"];
 #else
-                issuerEndPoint = context.Request.FormatBaseAddress();
+            issuerEndPoint = context.Request.FormatBaseAddress();
 #endif
 
 
-                    // Obtient les informations utilisateur à l'aide du jeton d'accès
-                    string authorization = $"Bearer {franceConnectResult.AccessToken}";
-                    var UserInfo = await _httpFcClient.GetFranceConnectUserInfo(authorization);
-                    if (UserInfo == null)
-                    {
-                        context.Response.StatusCode = 401;
-                        return;
-                    }           
-                
-                                
-                    ClaimsIdentity claimsIdentity = new ClaimsIdentity(new[]
-                                    {
+            // Obtient les informations utilisateur à l'aide du jeton d'accès
+            string authorization = $"Bearer {franceConnectResult.AccessToken}";
+            var UserInfo = await _httpFcClient.GetFranceConnectUserInfo(authorization);
+            if (UserInfo == null)
+            {
+                context.Response.StatusCode = 401;
+                return;
+            }
+
+
+            ClaimsIdentity claimsIdentity = new ClaimsIdentity(new[]
+                            {
                                                     new Claim("family_name", UserInfo.FamilyName != null ? UserInfo.FamilyName : ""),
                                                     new Claim("given_name", UserInfo.GivenName != null ? UserInfo.GivenName : ""),
                                                     new Claim("email", UserInfo.Email != null ? UserInfo.Email : ""),
@@ -192,45 +190,45 @@ namespace FranceConnectFacade.Identity.Middleware
                                                     new Claim("nonce", nonce.Value),
                                                     new Claim("identity_provider", "franceconnect"),
                                                 });
-                    context.User.AddIdentity(claimsIdentity);
+            context.User.AddIdentity(claimsIdentity);
 
-                    // Crée un nouveau jeton et signe le avec la clé
-                    // privée contenue dans le certificat X509
-                    string franceConnectFacadeIdToken = Helpers.Token.CreateTokenAndSignWithX509Cert(options.X509Cert,
-                                                                                                             options.FranceConnectOptions.ClientId,
-                                                                                                             issuerEndPoint,
-                                                                                                             claimsIdentity);
+            // Crée un nouveau jeton et signe le avec la clé
+            // privée contenue dans le certificat X509
+            string franceConnectFacadeIdToken = Helpers.Token.CreateTokenAndSignWithX509Cert(options.X509Cert,
+                                                                                                     options.FranceConnectOptions.ClientId,
+                                                                                                     issuerEndPoint,
+                                                                                                     claimsIdentity);
 
-                    if (string.IsNullOrEmpty(franceConnectFacadeIdToken))
-                    {
-                        context.Response.StatusCode = 401;
-                        return;
-                    }
+            if (string.IsNullOrEmpty(franceConnectFacadeIdToken))
+            {
+                context.Response.StatusCode = 401;
+                return;
+            }
 
 
-                    // Sauvegarde du nouveau jeton
-                    // pour réutilisation avec le EndPoint /api/token
-                    /// <see cref="FranceConnectFacadeOpenIdConnectController"/>
-                    /// <remarks>Voir si c'est judicieux de faire comme cela
-                    /// en terme de sécurité</remarks>                
-                    franceConnectResult.IdToken = franceConnectFacadeIdToken;
-                    context.Items.Add("token", franceConnectResult);                        
+            // Sauvegarde du nouveau jeton
+            // pour réutilisation avec le EndPoint /api/token
+            /// <see cref="FranceConnectFacadeOpenIdConnectController"/>
+            /// <remarks>Voir si c'est judicieux de faire comme cela
+            /// en terme de sécurité</remarks>                
+            franceConnectResult.IdToken = franceConnectFacadeIdToken;
+            context.Items.Add("token", franceConnectResult);
         }
         public async Task InvokeAsync(HttpContext context,
                                       FranceConnectFacadeConfigurationOptions options)
-        {           
+        {
             if (context == null)
             {
                 throw new ArgumentNullException(nameof(context));
             }
-           
+
             var endpoint = context.GetEndpoint();
             if (endpoint != null)
-            {                
+            {
                 FranceConnectFacadeEndPoint? endpointAttribute =
                     endpoint.Metadata.GetMetadata<FranceConnectFacadeEndPoint>();
-                
-                if (endpointAttribute !=null)
+
+                if (endpointAttribute != null)
                 {
                     if (endpointAttribute.EndPoint == null)
                     {
@@ -260,7 +258,7 @@ namespace FranceConnectFacade.Identity.Middleware
                         {
                             return;
                         }
-                    }                                       
+                    }
                     else
                     {
                         throw new ArgumentException("Point de terminaison FranceConnectFacade non trouvé");
@@ -268,10 +266,10 @@ namespace FranceConnectFacade.Identity.Middleware
                 }
             }
 
-            
+
             await _next(context);
         }
     }
-   
+
 }
 
