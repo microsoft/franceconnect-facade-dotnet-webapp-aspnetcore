@@ -1,55 +1,60 @@
-body::after{
-    position:absolute; width:0; height:0; overflow:hidden; z-index:-1;
-    content:url('[FRANCECONNECT BUTTON URL]') url('[FRANCECONNECT BUTTON HOVER URL]');
- }
- 
- .fc-signin {
-     text-align: center;
- }
- 
- .fc-span-container {
-     margin-bottom: 30px;
-     margin-top: 30px;
- }
- 
- .fc-button {
-     width: 228px;
-     height: 60px;
-     background-repeat: no-repeat; 
-     background-size: cover;
-     background-position: center center;
-     border: none;
-     cursor: pointer;
- }
- 
- .fc-button-background {
-     background: url('[FRANCECONNECT BUTTON URL]');
- }
- 
- .fc-button-background:hover {
-     background: url('[FRANCECONNECT BUTTON HOVER URL]');
- }
- 
- .fc-text-info {
-     margin-bottom: 15px;
-     margin-top: 0;
-     padding-left: 30%;
-     padding-right: 30%;
-     color: #646d77;
-     font-size: 14px;
- }
- 
- .fc-redirect, .fc-redirect:hover {
-     margin-top: 8px;
-     font-size: 13px;
- }
- 
- .fc-redirect {
-     color: #0b6ba8;
-     text-decoration: none;
- }
- 
- .fc-redirect:hover {
-     color: #063d60;
-     text-decoration: underline;
- }
+body::after {
+    position: absolute;
+    width: 0;
+    height: 0;
+    overflow: hidden;
+    z-index: -1;
+    content: url('[FRANCECONNECT BUTTON URL]') url('[FRANCECONNECT BUTTON HOVER URL]');
+}
+
+.fc-signin {
+    text-align: center;
+}
+
+.fc-span-container {
+    margin-bottom: 30px;
+    margin-top: 30px;
+}
+
+.fc-button {
+    width: 228px;
+    height: 60px;
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-position: center center;
+    border: none;
+    cursor: pointer;
+}
+
+.fc-button-background {
+    background: url('[FRANCECONNECT BUTTON URL]');
+}
+
+.fc-button-background:hover {
+    background: url('[FRANCECONNECT BUTTON HOVER URL]');
+}
+
+.fc-text-info {
+    margin-bottom: 15px;
+    margin-top: 0;
+    padding-left: 30%;
+    padding-right: 30%;
+    color: #646d77;
+    font-size: 14px;
+}
+
+.fc-redirect,
+.fc-redirect:hover {
+    margin-top: 8px;
+    font-size: 13px;
+}
+
+.fc-redirect {
+    color: #0b6ba8;
+    text-decoration: none;
+}
+
+.fc-redirect:hover {
+    color: #063d60;
+    text-decoration: underline;
+}

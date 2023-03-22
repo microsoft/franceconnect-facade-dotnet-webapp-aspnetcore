@@ -1,7 +1,9 @@
 {% assign defaultlang = settings['LanguageLocale/Code'] | default: 'en-us' %}
 {% assign homeurl = website.adx_partialurl %}
 <div class="navbar navbar-inverse navbar-static-top" role="navigation">
-    <div class="skip-to-content"><a href="#mainContent">{{ resx.Skip_To_Content | default: "Skip to main content" }}</a></div><div class="container">
+    <div class="skip-to-content"><a href="#mainContent">{{ resx.Skip_To_Content | default: "Skip to main content" }}</a>
+    </div>
+    <div class="container">
         <div class="navbar-header">
 
             <!--div class="visible-xs-block">
@@ -10,8 +12,11 @@
             <div class="visible-sm-block visible-md-block visible-lg-block visible-xs-block navbar-brand">
                 {% editable snippets 'Mobile Header' type: 'html' %}
             </div>
-            <button type="button" class="navbar-toggle collapsed" title="{{ snippets["Header/Toggle Navigation"] | default: resx['Toggle_Navigation'] | h }}" data-toggle="collapse" data-target="#navbar" aria-expanded="false" onclick="setHeight();">
-                <span class="sr-only">{{ snippets["Header/Toggle Navigation"] | default: resx['Toggle_Navigation'] | h }}</span>
+            <button type="button" class="navbar-toggle collapsed" title="{{ snippets[" Header/Toggle Navigation"] |
+                default: resx['Toggle_Navigation'] | h }}" data-toggle="collapse" data-target="#navbar"
+                aria-expanded="false" onclick="setHeight();">
+                <span class="sr-only">{{ snippets["Header/Toggle Navigation"] | default: resx['Toggle_Navigation'] | h
+                    }}</span>
                 <span class="icon-bar"></span>
                 <span class="icon-bar"></span>
                 <span class="icon-bar"></span>
@@ -20,7 +25,9 @@
         <div id="navbar" class="navbar-collapse collapse">
             {% assign primary_nav = weblinks["Default"] %}
             {% if primary_nav %}
-            <nav aria-label="{{ resx.Main_Navigation | default: "Main Navigation" }}" class="navbar-right menu-bar {% if primary_nav.editable %}xrm-entity xrm-editable-adx_weblinkset{% endif %}" data-weblinks-maxdepth="2">
+            <nav aria-label="{{ resx.Main_Navigation | default: " Main Navigation" }}"
+                class="navbar-right menu-bar {% if primary_nav.editable %}xrm-entity xrm-editable-adx_weblinkset{% endif %}"
+                data-weblinks-maxdepth="2">
                 <ul class="nav navbar-nav weblinks">
                     {% for link in primary_nav.weblinks %}
                     {% unless forloop.first %}
@@ -34,14 +41,21 @@
                     {% assign sublinks = link.weblinks %}
                     {% endif %}
                     <li class="weblink {% if sublinks.size > 0 %} dropdown{% endif %}">
-                        <a aria-label="{{ link.name | escape }}" aria-roledescription = "link" {% if sublinks.size > 0 -%} href="#" class="dropdown-toggle" data-toggle="dropdown" {%- else -%} href="{{ link.url | escape }}" {%- endif -%} {%- if link.Open_In_New_Window %} target="_blank" {% endif -%} {%- if link.nofollow %} rel="nofollow" {% endif -%} {%- if link.tooltip %} title="{{ link.tooltip | escape }}" {% endif %}>
+                        <a aria-label="{{ link.name | escape }}" aria-roledescription="link" {% if sublinks.size> 0 -%}
+                            href="#" class="dropdown-toggle" data-toggle="dropdown" {%- else -%} href="{{ link.url |
+                            escape }}" {%- endif -%} {%- if link.Open_In_New_Window %} target="_blank" {% endif -%} {%-
+                            if link.nofollow %} rel="nofollow" {% endif -%} {%- if link.tooltip %} title="{{
+                            link.tooltip | escape }}" {% endif %}>
                             {%- if link.image -%}
-                            {%- if link.image.url  -%}
+                            {%- if link.image.url -%}
                             {%- if link.image.url.first == '.' -%}
                             <span class="{{ link.image.url | split:'.' | join }}" aria-hidden="true"></span>
                             {%- endif -%}
                             {%- else -%}
-                            <img src="{{ link.image.url | escape }}" alt="{{ link.image.alternate_text | default:link.tooltip | escape }}" {% if link.image.width %}width="{{ link.image.width | escape }}" {% endif %} {% if link.image.height %}height="{{ link.image.height | escape }}" {% endif %} />
+                            <img src="{{ link.image.url | escape }}"
+                                alt="{{ link.image.alternate_text | default:link.tooltip | escape }}" {% if
+                                link.image.width %}width="{{ link.image.width | escape }}" {% endif %} {% if
+                                link.image.height %}height="{{ link.image.height | escape }}" {% endif %} />
                             {%- endif -%}
                             {%- endif -%}
                             {%- unless link.display_image_only -%}
@@ -52,16 +66,23 @@
                             {%- endif -%}
                         </a>
                         {% if sublinks.size > 0 %}
-                        <ul class="dropdown-menu" aria-roledescription = "link">
+                        <ul class="dropdown-menu" aria-roledescription="link">
                             {% if link.name %}
                             <li>
-                                <a aria-label="{{ link.name | escape }}" aria-roledescription = "link" href="{{ link.url }}" {% if link.Open_In_New_Window %} target="_blank" {% endif %} {% if link.nofollow %}rel="nofollow" {% endif %} {% if link.tooltip %}title="{{ link.tooltip | escape }}" {% endif %}>{{ link.name | escape }}</a>
+                                <a aria-label="{{ link.name | escape }}" aria-roledescription="link"
+                                    href="{{ link.url }}" {% if link.Open_In_New_Window %} target="_blank" {% endif %}
+                                    {% if link.nofollow %}rel="nofollow" {% endif %} {% if link.tooltip
+                                    %}title="{{ link.tooltip | escape }}" {% endif %}>{{ link.name | escape }}</a>
                             </li>
                             <div class="divider"></div>
                             {% endif %}
                             {% for sublink in sublinks %}
                             <li>
-                                <a aria-label="{{ sublink.name | default:sublink.title | escape }}" aria-roledescription = "link" href="{{ sublink.url }}" {% if sublink.Open_In_New_Window %} target="_blank" {% endif %} {% if sublink.nofollow %}rel="nofollow" {% endif %} {% if sublink.tooltip %}title="{{ sublink.tooltip | escape }}" {% endif %}>
+                                <a aria-label="{{ sublink.name | default:sublink.title | escape }}"
+                                    aria-roledescription="link" href="{{ sublink.url }}" {% if
+                                    sublink.Open_In_New_Window %} target="_blank" {% endif %} {% if sublink.nofollow
+                                    %}rel="nofollow" {% endif %} {% if sublink.tooltip
+                                    %}title="{{ sublink.tooltip | escape }}" {% endif %}>
                                     {{ sublink.name | default:sublink.title | escape }}
                                 </a>
                             </li>
@@ -74,7 +95,9 @@
                     {% if search_enabled %}
                     <li class="divider-vertical" aria-hidden="true"></li>
                     <li class="dropdown">
-                        <a id="search" class="navbar-icon" href="#" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false" aria-label="{{ snippets["Header/Search/ToolTip"] | default:resx["Search_DefaultText"] | escape }}">
+                        <a id="search" class="navbar-icon" href="#" data-toggle="dropdown" role="button"
+                            aria-haspopup="true" aria-expanded="false" aria-label="{{ snippets[" Header/Search/ToolTip"]
+                            | default:resx["Search_DefaultText"] | escape }}">
                             <span class="glyphicon glyphicon-search"></a>
                         </a>
                         <div class="dropdown-menu dropdown-search">
@@ -85,7 +108,9 @@
                     <li class="divider-vertical" aria-hidden="true"></li>
                     {% if website.languages.size > 1 %}
                     <li class="dropdown">
-                        <a class="dropdown-toggle" aria-roledescription = "link" href="#" data-toggle="dropdown" aria-label="{{ website.selected_language.name | escape }}" aria-haspopup="true" aria-expanded="false" title="{{ website.selected_language.name | escape }}">
+                        <a class="dropdown-toggle" aria-roledescription="link" href="#" data-toggle="dropdown"
+                            aria-label="{{ website.selected_language.name | escape }}" aria-haspopup="true"
+                            aria-expanded="false" title="{{ website.selected_language.name | escape }}">
                             <span class="drop_language">{{ website.selected_language.name | escape }}</span>
                             <span class="caret"></span>
                         </a>
@@ -96,43 +121,55 @@
                     {% if user %}
                     <li class="dropdown">
                         {% assign username=user.fullname | escape %}
-                        {% if user.[IDENTITY PROVIDER DATAVERSE COLUMN] == "franceconnect" %}
-                            <div id="fconnect-profile" data-fc-logout-url="/logout">
-                                <a href="#" class="has-text-link">
-                                    {{ username | default: resx['Default_Profile_name'] }}
-                                </a>
-                            </div>
-                            {% else %}
-                            <a href="#" class="dropdown-toggle" aria-roledescription = "link" title="{{username | default: resx['Default_Profile_name'] }}" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                <span class="username">{{ username | default: resx['Default_Profile_name'] }}</span>
-                                <span class="caret"></span>
+                        {% if user.msf_identityprovider == "franceconnect" %}
+                        <div id="fconnect-profile" data-fc-logout-url="/logout">
+                            <a href="#" class="has-text-link">
+                                {{ username | default: resx['Default_Profile_name'] }}
                             </a>
-                            <ul class="dropdown-menu">
-                                {% assign show_profile_nav = settings["Header/ShowAllProfileNavigationLinks"] | boolean | default:true %}
-                                {% if show_profile_nav %}
-                                {% assign profile_nav = weblinks["Profile Navigation"] %}
-                                {% if profile_nav %}
-                                {% for link in profile_nav.weblinks %}
-                                <li>
-                                    <a aria-label="{{ link.name | escape }}" aria-roledescription = "link" href="{{ link.url | escape }}" title="{{ link.name | escape }}">{{ link.name | escape }}</a>
-                                </li>
-                                {% endfor %}
-                                {% endif %}
-                                {% else %}
-                                <li><a aria-label="{{ snippets["Profile Link Text"] | default:resx["Profile_Text"] | escape }}" aria-roledescription = "link" href="{{ sitemarkers['Profile'].url | escape }}">{{ snippets["Profile Link Text"] | default:resx["Profile_Text"] | escape }}</a></li>
-                                {% endif %}
-                                <li class="divider" role="separator" aria-hidden="true"></li>
-                                <li>
-                                    <a aria-label="{{ snippets["links/logout"] | default:resx["Sign_Out"] | escape }}" aria-roledescription = "link" href="{% if homeurl%}/{{ homeurl }}{% endif %}{{ website.sign_out_url_substitution }}" title="{{ snippets["links/logout"] | default:resx["Sign_Out"] | escape }}">
-                                        {{ snippets["links/logout"] | default:resx["Sign_Out"] | escape }}
-                                    </a>
-                                </li>
-                            </ul>
+                        </div>
+                        {% else %}
+                        <a href="#" class="dropdown-toggle" aria-roledescription="link"
+                            title="{{username | default: resx['Default_Profile_name'] }}" data-toggle="dropdown"
+                            aria-haspopup="true" aria-expanded="false">
+                            <span class="username">{{ username | default: resx['Default_Profile_name'] }}</span>
+                            <span class="caret"></span>
+                        </a>
+                        <ul class="dropdown-menu">
+                            {% assign show_profile_nav = settings["Header/ShowAllProfileNavigationLinks"] | boolean |
+                            default:true %}
+                            {% if show_profile_nav %}
+                            {% assign profile_nav = weblinks["Profile Navigation"] %}
+                            {% if profile_nav %}
+                            {% for link in profile_nav.weblinks %}
+                            <li>
+                                <a aria-label="{{ link.name | escape }}" aria-roledescription="link"
+                                    href="{{ link.url | escape }}" title="{{ link.name | escape }}">{{ link.name |
+                                    escape }}</a>
+                            </li>
+                            {% endfor %}
                             {% endif %}
+                            {% else %}
+                            <li><a aria-label="{{ snippets[" Profile Link Text"] | default:resx["Profile_Text"] | escape
+                                    }}" aria-roledescription="link" href="{{ sitemarkers['Profile'].url | escape }}">{{
+                                    snippets["Profile Link Text"] | default:resx["Profile_Text"] | escape }}</a></li>
+                            {% endif %}
+                            <li class="divider" role="separator" aria-hidden="true"></li>
+                            <li>
+                                <a aria-label="{{ snippets[" links/logout"] | default:resx["Sign_Out"] | escape }}"
+                                    aria-roledescription="link"
+                                    href="{% if homeurl%}/{{ homeurl }}{% endif %}{{ website.sign_out_url_substitution }}"
+                                    title="{{ snippets[" links/logout"] | default:resx["Sign_Out"] | escape }}">
+                                    {{ snippets["links/logout"] | default:resx["Sign_Out"] | escape }}
+                                </a>
+                            </li>
+                        </ul>
+                        {% endif %}
                     </li>
                     {% else %}
                     <li>
-                        <a aria-label="{{ snippets["links/login"] | default:resx["Sign_In"] | escape }}" aria-roledescription = "link" href="{% if homeurl%}/{{ homeurl }}{% endif %}{{ website.sign_in_url_substitution }}">
+                        <a aria-label="{{ snippets[" links/login"] | default:resx["Sign_In"] | escape }}"
+                            aria-roledescription="link"
+                            href="{% if homeurl%}/{{ homeurl }}{% endif %}{{ website.sign_in_url_substitution }}">
                             {{ snippets["links/login"] | default:resx["Sign_In"] | escape }}
                         </a>
                     </li>
@@ -155,9 +192,11 @@
 {% assign section_class = "section-landing-forums" %}
 {% endif %}
 <section class="page_section {{ section_class | h }} color-inverse">
-    <div class="row sectionBlockLayout sectionFixedStyle" style="display: flex; flex-wrap: wrap; text-align: center; min-height: 420px; background: url('/Homehero.png') center / cover no-repeat; padding: 8px; margin: 0px;">
+    <div class="row sectionBlockLayout sectionFixedStyle"
+        style="display: flex; flex-wrap: wrap; text-align: center; min-height: 420px; background: url('/Homehero.png') center / cover no-repeat; padding: 8px; margin: 0px;">
         <div class="container" style="display: flex; flex-wrap: wrap;">
-            <div class="col-md-12 columnBlockLayout" style="display: flex; flex-direction: column; justify-content: center;">
+            <div class="col-md-12 columnBlockLayout"
+                style="display: flex; flex-direction: column; justify-content: center;">
                 {% if current_page == sr_page %}
                 <h1 id="mainContent">{% editable snippets 'Search/Title' default: resx["Discover_Contoso"] %}</h1>
                 {% include 'Search' search_id:'search_control' %}
@@ -169,34 +208,165 @@
 {% endif %}
 {% endif %}
 {% endsubstitution %}
-<script src="https://fcp.integ01.dev-franceconnect.fr/js/franceconnect.js"></script>
 <script type="text/javascript">
-  window.onload = function() {
-    if (window.navigator.appName == "Microsoft Internet Explorer" || window.navigator.userAgent.indexOf("Trident") > 0) {
-      var searchElement = document.getElementById("search");
-      if (searchElement != null) searchElement.setAttribute("href", "");
+    var franceConnectKit = {};
+
+    (function (window) {
+        var fconnect = {
+            tracesUrl: '/traces',
+            aboutUrl: 'https://franceconnect.gouv.fr',
+            currentHost: 'fcp.integ01.dev-franceconnect.fr',
+        };
+
+        franceConnectKit.init = function () {
+            includeFCCss();
+            var fconnectProfile = document.getElementById('fconnect-profile');
+            if (fconnectProfile) {
+                var linkAccess = document.querySelector('#fconnect-profile > a');
+                var fcLogoutUrl = fconnectProfile.getAttribute('data-fc-logout-url');
+                var access = createFCAccessElement(fcLogoutUrl);
+                fconnectProfile.appendChild(access);
+                linkAccess.onclick = toggleElement.bind(access);
+            }
+        };
+
+        var document = window.document;
+
+        document.addEventListener('DOMContentLoaded', function () {
+            franceConnectKit.init();
+        });
+
+        function includeFCCss() {
+            var ss = document.styleSheets;
+            for (var i = 0, max = ss.length; i < max; i++) {
+                if (ss[i].href == 'http://' + fconnect.currentHost + '/stylesheets/franceconnect.css' || ss[i].href == 'https://' + fconnect.currentHost + '/stylesheets/franceconnect.css')
+                    return;
+            }
+
+            var linkCss = document.createElement('link');
+            linkCss.rel = 'stylesheet';
+            linkCss.href = '//' + fconnect.currentHost + '/stylesheets/franceconnect.css';
+            linkCss.type = 'text/css';
+            linkCss.media = 'screen';
+
+            document.getElementsByTagName('head')[0].appendChild(linkCss);
+        }
+
+        function toggleElement(event) {
+            event.preventDefault();
+            if (this.style.display === "block") {
+                this.style.display = "none";
+            } else {
+                this.style.display = "block";
+            }
+        }
+
+        function closeFCPopin(event) {
+            event.preventDefault();
+            fconnect.popin.className = 'fade-out';
+            setTimeout(function () {
+                document.body.removeChild(fconnect.popin);
+            }, 200);
+        }
+
+        function openFCPopin() {
+            var isMobile = window.matchMedia("only screen and (max-width: 760px)");
+            if (!isMobile.matches) {
+                fconnect.popin = document.createElement('div');
+                fconnect.popin.id = 'fc-background';
+                var iframe = createFCIframe();
+                document.body.appendChild(fconnect.popin);
+                fconnect.popin.appendChild(iframe);
+
+                setTimeout(function () {
+                    fconnect.popin.className = 'fade-in';
+                }, 200);
+            }
+        }
+
+        function createFCIframe() {
+            var iframe = document.createElement("iframe");
+            iframe.setAttribute('id', 'fconnect-iframe');
+            iframe.frameBorder = 0;
+            iframe.name = 'fconnect-iframe';
+            return iframe;
+        }
+
+        function createFCAccessElement(logoutUrl) {
+            var access = document.createElement('div');
+            access.id = 'fconnect-access';
+            access.innerHTML = '<h5>Vous êtes identifié grâce à FranceConnect</h5>';
+            access.appendChild(createAboutLink());
+            access.appendChild(document.createElement('hr'));
+            access.appendChild(createHistoryLink());
+            access.appendChild(createLogoutElement(logoutUrl));
+            return access;
+        }
+
+        function createHistoryLink() {
+            var historyLink = document.createElement('a');
+            historyLink.target = 'fconnect-iframe';
+            historyLink.href = '//' + fconnect.currentHost + fconnect.tracesUrl;
+            historyLink.innerHTML = 'Historique des connexions/échanges de données';
+            return historyLink;
+        }
+
+        function createAboutLink() {
+            var aboutLink = document.createElement('a');
+            aboutLink.href = fconnect.aboutUrl;
+            aboutLink.innerHTML = 'Qu\'est-ce-que FranceConnect ?';
+
+            return aboutLink;
+        }
+
+        function createLogoutElement(logoutUrl) {
+            var elm = document.createElement('div');
+            elm.className = 'logout';
+            elm.innerHTML = '<a class="btn btn-default" href="' + logoutUrl + '">Se déconnecter</a>';
+            return elm;
+        }
+
+        var eventMethod = window.addEventListener ? "addEventListener" : "attachEvent";
+        var eventer = window[eventMethod];
+        var messageEvent = eventMethod == "attachEvent" ? "onmessage" : "message";
+
+        // Listen to message from child window
+        eventer(messageEvent, function (e) {
+            var key = e.message ? "message" : "data";
+            var data = e[key];
+            if (data === 'close_popup') {
+                closeFCPopin(e);
+            }
+        }, false);
+    })(this);
+</script>
+<script type="text/javascript">
+    window.onload = function () {
+        if (window.navigator.appName == "Microsoft Internet Explorer" || window.navigator.userAgent.indexOf("Trident") > 0) {
+            var searchElement = document.getElementById("search");
+            if (searchElement != null) searchElement.setAttribute("href", "");
+        }
+    };
+    function setHeight() {
+        var windowHeight = window.innerHeight - 140;
+        var navbar = document.getElementById("navbar");
+        if (navbar) {
+            navbar.style.maxHeight = windowHeight + "px";
+        }
     }
-  };
-  function setHeight() {
-    var windowHeight = window.innerHeight - 140;
-    var navbar = document.getElementById("navbar");
-    if (navbar) {
-      navbar.style.maxHeight = windowHeight + "px";
-    }
-  }
-  window.addEventListener('resize', function(event) {
-    setHeight();
-  });
+    window.addEventListener('resize', function (event) {
+        setHeight();
+    });
 </script>
 <script>
     var authContext = window.parent.AuthenticationContext;
     var user = authContext.user;
 
     if (user.authenticationType === "aad") {
-    console.log("The user signed in using Azure Active Directory.");
+        console.log("The user signed in using Azure Active Directory.");
     } else if (user.authenticationType === "adfs") {
-    console.log("The user signed in using Active Directory Federation Services.");
+        console.log("The user signed in using Active Directory Federation Services.");
     } else {
-    console.log("The user signed in using an external identity provider.");
+        console.log("The user signed in using an external identity provider.");
     }
 </script>
