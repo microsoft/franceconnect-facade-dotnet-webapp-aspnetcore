@@ -1,3 +1,7 @@
+/* Copyright (c) Microsoft Corporation. */
+/* Licensed under the MIT License */
+
+
 body::after {
     position: absolute;
     width: 0;
