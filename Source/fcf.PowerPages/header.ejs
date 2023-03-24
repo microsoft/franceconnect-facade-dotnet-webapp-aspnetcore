@@ -362,15 +362,3 @@
         setHeight();
     });
 </script>
-<script>
-    var authContext = window.parent.AuthenticationContext;
-    var user = authContext.user;
-
-    if (user.authenticationType === "aad") {
-        console.log("The user signed in using Azure Active Directory.");
-    } else if (user.authenticationType === "adfs") {
-        console.log("The user signed in using Active Directory Federation Services.");
-    } else {
-        console.log("The user signed in using an external identity provider.");
-    }
-</script>
