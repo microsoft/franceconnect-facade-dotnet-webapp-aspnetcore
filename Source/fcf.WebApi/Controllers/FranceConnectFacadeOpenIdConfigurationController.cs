@@ -5,6 +5,7 @@ using FranceConnectFacade.Identity.Extensions;
 using FranceConnectFacade.Identity.Model;
 using FranceConnectFacade.Identity.WebApi.Extensions;
 using Microsoft.AspNetCore.Mvc;
+using System.Security.Cryptography;
 using System.Security.Cryptography.X509Certificates;
 
 namespace FranceConnectFacade.Identity.Controllers
@@ -84,7 +85,23 @@ namespace FranceConnectFacade.Identity.Controllers
 
             // TODO : A vérifier
             // https://www.rfc-editor.org/rfc/rfc7517.html#section-4.5
-            //discovery.keys[0].n = x509.GetSerialNumberString();
+            var key =  x509.GetRSAPublicKey();
+            if (key != null)
+            {
+                RSAParameters parameters = key.ExportParameters(false);
+                byte[]? modulus = parameters.Modulus;
+                byte[]? exponent = parameters.Exponent;
+
+                if (modulus != null)
+                {
+                    discovery.keys[0].n = Convert.ToBase64String(modulus);
+                }
+
+                if (exponent != null)
+                {
+                    discovery.keys[0].e = Convert.ToBase64String(exponent);
+                }
+            }
             discovery.keys[0].kid = x509.Thumbprint;
             //discovery.keys[0].x5t = x509.Thumbprint;
             return Ok(discovery);
@@ -127,7 +144,7 @@ namespace FranceConnectFacade.Identity.Controllers
             openIdConfiguration.AuthorizationEndpoint = $"{baseAddress}/{openIdConfiguration.AuthorizationEndpoint}";
             openIdConfiguration.JwksUri = $"{baseAddress}/{openIdConfiguration.JwksUri}";
             openIdConfiguration.EndSessionEndpoint = $"{baseAddress}/{openIdConfiguration.EndSessionEndpoint}";
-            openIdConfiguration.UserInfoEndpoint = $"{baseAddress}/{openIdConfiguration.UserInfoEndpoint}";
+            //openIdConfiguration.UserInfoEndpoint = $"{baseAddress}/{openIdConfiguration.UserInfoEndpoint}";
             openIdConfiguration.TokenEndpoint = $"{baseAddress}/{openIdConfiguration.TokenEndpoint}";
             openIdConfiguration.Issuer = baseAddress;
 

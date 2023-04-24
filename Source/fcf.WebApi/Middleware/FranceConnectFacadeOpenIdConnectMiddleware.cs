@@ -52,8 +52,14 @@ namespace FranceConnectFacade.Identity.Middleware
 
             }
 
+            // Le redirectUri va être ajouté au paramètre state pour
+            // être récupéré plus tard par le endpoint login-callback
+            // TODO sauvegarder redirectUri dans une map et passer
+            // uniquement son index à state
+            string? redirectUri = Common.GetValue("redirect_uri", fromQuery);
+
             // Construction d'une nouvelle QueryString avec ajout
-            // de acr_values obligatoire pour FranceConnect            
+            // de acr_values obligatoire pour FranceConnect
             string query = $"?client_id={Common.GetValue("client_id", fromQuery)}" +
                         $"&redirect_uri={_configuration["FranceConnect:fcredirecturi"]}" +
                         $"&response_type={Common.GetValue("response_type", fromQuery)}" +
@@ -61,7 +67,7 @@ namespace FranceConnectFacade.Identity.Middleware
                         $"&response_mode={Common.GetValue("response_mode", fromQuery)}" +
                         $"&nonce={Common.GetValue("nonce", fromQuery)}" +
                         $"&acr_values={_configuration["OpenIdConfiguration:AcrValuesSupported:0"]}" +
-                        $"&state={Common.GetValue("state", fromQuery)}";
+                        $"&state={Common.GetValue("state", fromQuery)}{redirectUri}";
 
             // Sauvegarde de la QueryString dans le contexte http
             // pour réutilisation avec le EndPoint api/authorize
