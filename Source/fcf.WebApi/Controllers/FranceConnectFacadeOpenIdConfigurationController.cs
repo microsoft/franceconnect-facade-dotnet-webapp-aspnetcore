@@ -144,7 +144,7 @@ namespace FranceConnectFacade.Identity.Controllers
             openIdConfiguration.AuthorizationEndpoint = $"{baseAddress}/{openIdConfiguration.AuthorizationEndpoint}";
             openIdConfiguration.JwksUri = $"{baseAddress}/{openIdConfiguration.JwksUri}";
             openIdConfiguration.EndSessionEndpoint = $"{baseAddress}/{openIdConfiguration.EndSessionEndpoint}";
-            //openIdConfiguration.UserInfoEndpoint = $"{baseAddress}/{openIdConfiguration.UserInfoEndpoint}";
+            openIdConfiguration.UserInfoEndpoint = $"{baseAddress}/{openIdConfiguration.UserInfoEndpoint}";
             openIdConfiguration.TokenEndpoint = $"{baseAddress}/{openIdConfiguration.TokenEndpoint}";
             openIdConfiguration.Issuer = baseAddress;
 

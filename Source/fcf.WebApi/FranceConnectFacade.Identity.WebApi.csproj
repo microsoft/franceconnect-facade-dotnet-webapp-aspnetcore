@@ -23,12 +23,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Compile Remove="Controllers\FranceConnectFacadeOpenIdConfigurationControllerAAD.cs" />
-    <Compile Remove="Middleware\FranceConnectFacadeOpenIdConnectMiddlewareAAD.cs" />
-    <Compile Remove="Services\AzureAdB2CConfiguration.cs" />
-  </ItemGroup>
-
-  <ItemGroup>
     <None Remove="appsettings.json.aad" />
   </ItemGroup>
 
