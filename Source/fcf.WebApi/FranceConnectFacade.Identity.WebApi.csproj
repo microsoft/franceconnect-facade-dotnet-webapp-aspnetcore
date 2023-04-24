@@ -23,20 +23,15 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Compile Remove="Controllers\FranceConnectFacadeOpenIdConfigurationControllerAAD.cs" />
-    <Compile Remove="Middleware\FranceConnectFacadeOpenIdConnectMiddlewareAAD.cs" />
-  </ItemGroup>
-
-  <ItemGroup>
     <None Remove="appsettings.json.aad" />
   </ItemGroup>
 
   <ItemGroup>
     <PackageReference Include="Azure.Extensions.AspNetCore.Configuration.Secrets" Version="1.2.2" />
-    <PackageReference Include="Azure.Identity" Version="1.7.0" />
-    <PackageReference Include="Microsoft.IdentityModel.Tokens" Version="6.21.0" />
-    <PackageReference Include="Swashbuckle.AspNetCore" Version="6.3.2" />
-    <PackageReference Include="System.IdentityModel.Tokens.Jwt" Version="6.21.0" />
+    <PackageReference Include="Azure.Identity" Version="1.8.2" />
+    <PackageReference Include="Microsoft.IdentityModel.Tokens" Version="6.29.0" />
+    <PackageReference Include="Swashbuckle.AspNetCore" Version="6.5.0" />
+    <PackageReference Include="System.IdentityModel.Tokens.Jwt" Version="6.29.0" />
   </ItemGroup>
 
 </Project>

@@ -41,7 +41,12 @@ namespace FranceConnectFacade.Identity.Controllers
         {
             _logger.LogInformation($"Controller : login-callback");
 
-            string? redirectUrl = $"{_configuration["FranceConnect:portalredirecturi"]}?code={code}&state={state}";
+            //Extraction du redirectUri sauvegardé dans le state
+            string redirectUri = state.Substring(state.IndexOf("http"));
+            state = state.Substring(0, state.IndexOf("http"));
+
+            string? redirectUrl = $"{redirectUri}?code={code}&state={state}";
+
             //Redirige vers l'application Portal/Page
             return new RedirectResult(redirectUrl);
         }
