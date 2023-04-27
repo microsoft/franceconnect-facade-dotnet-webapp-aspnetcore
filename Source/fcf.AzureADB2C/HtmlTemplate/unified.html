@@ -1282,42 +1282,30 @@
                         <img class="companyLogo" data-tenant-branding-logo="true"
                             src="https://yourstorageaccount.blob.core.windows.net/customsignin/src/images/logo.svg"
                             alt="Company Logo">
-                        <div class="claims-provider-list-buttons social" aria-label="Connectez-vous avec FranceConnect"
-                            role="form">
-                            <p class="fc-text-info">FranceConnect est la solution proposée par l'État pour sécuriser et
-                                simplifier la connexion à vos services en ligne.</p>
-                            <div class="fc-container">
-                            </div>
-                            <a class="fc-redirect" href="https://franceconnect.gouv.fr/">Qu'est-ce que FranceConnect
-                                ?</a>
-                            <div class="divider">
-                                <h2>OU</h2>
-                            </div>
-                            <div id="api" role="main">
-                            </div>
+                        <p class="fc-text-info">FranceConnect est la solution proposée par l'État pour sécuriser et
+                            simplifier la connexion à vos services en ligne.</p>
+                        <button class="fc-button fc-button-background" id="FranceConnectButton"></button>
+                        <br>
+                        <a class="fc-redirect" href="https://franceconnect.gouv.fr/">Qu'est-ce que FranceConnect
+                            ?</a>
+                        <div class="divider">
+                            <h2>OU</h2>
+                        </div>
+                        <div id="api" role="main">
                         </div>
                     </div>
                 </div>
             </div>
         </div>
+    </div>
 </body>
 
 </html>
+
 <script>
     $(document).ready(function () {
-        // Personnalisation du bouton FranceConnect
-        $("#FranceConnect").addClass("fc-button");
-        $(".fc-button").addClass("fc-button-background");
-        $(".fc-button").removeClass("accountButton firstButton claims-provider-selection");
-        $(".fc-button").text("");
-
-        // Déplacement du bouton FranceConnect dans une autre div
-        $(".fc-button").appendTo(".fc-container");
-
-        // Suppression des éléments html inutiles
-        $(".heading").remove();
-        if ($.trim($('.options div').text()) == '') {
-            $(".claims-provider-list-buttons .social").remove();
-        }
+        $("#FranceConnectButton").click(function () {
+            $("#FranceConnect").click();
+        });
     });
 </script>
