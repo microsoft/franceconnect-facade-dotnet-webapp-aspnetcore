@@ -21,14 +21,15 @@ The FranceConnect service implementation documentation is available on the [part
 
 From a FranceConnected services (a.k.a., service providers (SP)) standpoint, [Dynamics 365](https://dynamics.microsoft.com/) Biz Apps portals, the [Power Pages](https://powerpages.microsoft.com/) websites, formely Power Apps portals, as well as [Azure AD B2C](https://azure.microsoft.com/en-us/services/active-directory/external-identities/b2c/#overview), cannot unfortunately directly integrate with the FranceConnect platform (FCP), while both these offerings and FCP are based on the same industry standard protocol, namely the [OpenID Connect (OIDC) protocol](https://openid.net/specs/openid-connect-core-1_0.html) w/ the authorization code flow. As always, the devil resides in detail. 
 
-in this context, this project both discusses and illustrates a suggested solution via a so-called FranceConnect Facade (FCF), i.e., a lightweight adaptation layer to handle all the identified discrepancies and cope with the related issues, and to ultimately interoperate with FCP from a "plumbing" perspective. 
+in this context, this project both discusses and illustrates a suggested solution via a so-called FranceConnect Facade (FCF), i.e., a lightweight adaptation layer to handle all the identified discrepancies and cope with the related issues, and to ultimately interoperate with FCP from a "plumbing" perspective, while also providing the expected user experience (UX) with the so-called FranceConnect button. 
 
 ## Content
 
 This project currently provides the following content:
 - [A series of technical-functional specifications (Draft)](https://github.com/microsoft/franceconnect-facade-dotnet-webapp-aspnetcore/tree/master/Specifications) to build such a facade.
 - [A code sample in .NET 6 (LTS)](https://github.com/microsoft/franceconnect-facade-dotnet-webapp-aspnetcore/tree/master/Source) to illustrate how to implement such a defined facade. 
-- [A "Getting Started" guide](https://github.com/microsoft/franceconnect-facade-dotnet-webapp-aspnetcore/tree/master/Documentation) to help deploy the code sample, and how to test it.
+- [A "Getting Started" guide](https://github.com/microsoft/franceconnect-facade-dotnet-webapp-aspnetcore/tree/master/Documentation) to help deploy the code sample, and how to test it with Microsoft Power Pages for direct integration.
+- [A dedicated Azure AD B2C guide](https://github.com/microsoft/franceconnect-facade-dotnet-webapp-aspnetcore/tree/master/Documentation) to help leverage the code sample, with Azure Active Directory B2C (Azure AD B2C) with the B2C user flows and/or the custom policies, as far as user journeys are concerned. Indirected integration of Microsoft Power Pages is also covered.
 - [A series of Bicep scripts](https://github.com/microsoft/franceconnect-facade-dotnet-webapp-aspnetcore/tree/main/Scripts) to help deploy the required resources in Azure, and fulfill the prerequisites that pertains to this deployment.
 
 # Contributing
