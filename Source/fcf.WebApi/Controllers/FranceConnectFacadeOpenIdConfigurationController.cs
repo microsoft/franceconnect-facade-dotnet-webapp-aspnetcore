@@ -34,7 +34,7 @@ namespace FranceConnectFacade.Identity.Controllers
             var rawCertFromBase64 = Convert.FromBase64String(rawCertificate);
             _logger.LogInformation("RawCertFromBase64");
             X509Certificate2 x509 = new X509Certificate2(rawCertFromBase64);
-            return Ok(x509.GetIssuerName());
+            return Ok(x509.Issuer);
 
             //return Ok(_configuration["ClientId"]);
 
