@@ -36,8 +36,6 @@ namespace FranceConnectFacade.Identity.Controllers
             X509Certificate2 x509 = new X509Certificate2(rawCertFromBase64);
             return Ok(x509.Issuer);
 
-            //return Ok(_configuration["ClientId"]);
-
         }
         /// <summary>
         /// Point de terminaison permettant de récupérer la clé
