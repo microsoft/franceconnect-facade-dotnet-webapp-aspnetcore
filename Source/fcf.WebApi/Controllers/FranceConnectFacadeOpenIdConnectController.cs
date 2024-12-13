@@ -59,9 +59,9 @@ namespace FranceConnectFacade.Identity.Controllers
 
         public IActionResult Token()
         {
-            
+
             var fcfResult = HttpContext.Items["token"];
-            
+
             if (fcfResult == null)
             {
                 return new UnauthorizedResult();
@@ -71,7 +71,6 @@ namespace FranceConnectFacade.Identity.Controllers
             // Retourne le nouveau jeton à l'application Portal/Page
             return new OkObjectResult(fcfResult);
 
-                        
         }
 
         /// <summary>
@@ -105,7 +104,6 @@ namespace FranceConnectFacade.Identity.Controllers
             string redirectUri = $"{baseAddress}/{query}";
             var redirectReponse = this.Redirect(redirectUri);
 
-            
             _logger.LogInformation($"Controller : authorize");
             // Redirige l'appel vers FranceConnect
             return redirectReponse;

@@ -180,8 +180,7 @@ namespace FranceConnectFacade.Identity.Middleware
                 context.Response.StatusCode = 401;
                 return;
             }
-
-
+            
             ClaimsIdentity claimsIdentity = new ClaimsIdentity(new[]
                             {
                                                     new Claim("family_name", UserInfo.FamilyName != null ? UserInfo.FamilyName : ""),
@@ -195,9 +194,9 @@ namespace FranceConnectFacade.Identity.Middleware
                                                     new Claim("sub", UserInfo.Sub != null ? UserInfo.Sub : "" ),
                                                     new Claim("nonce", nonce.Value),
                                                     new Claim("identity_provider", "franceconnect"),
+                                                    new Claim("id_token", franceConnectResult.IdToken),
                                                 });
             context.User.AddIdentity(claimsIdentity);
-
             // Crée un nouveau jeton et signe le avec la clé
             // privée contenue dans le certificat X509
             string franceConnectFacadeIdToken = Helpers.Token.CreateTokenAndSignWithX509Cert(options.X509Cert,
